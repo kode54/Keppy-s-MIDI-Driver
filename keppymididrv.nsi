@@ -200,7 +200,7 @@ NEXT3:
    ${EndIf}
 REGDONE:
   ; Write the uninstall keys
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "DisplayName" "Keppy's MIDI Driver 1.5 (Bugfix 179)"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "DisplayName" "Keppy's MIDI Driver 1.5 (Bugfix 200)"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "NoRepair" 1
   WriteRegDWORD HKLM "Software\Keppy's MIDI Driver" "volume" "10000"

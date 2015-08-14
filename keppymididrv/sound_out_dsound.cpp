@@ -4,9 +4,7 @@
 #endif
 
 #include <windows.h>
-
 #include "sound_out.h"
-
 #include "ds_stream.h"
 
 class sound_out_i_dsound : public sound_out

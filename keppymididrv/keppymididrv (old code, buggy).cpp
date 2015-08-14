@@ -87,8 +87,7 @@ static int sound_out_volume_int = 0x1000;
 static int xaudio2_frames = 0; //default
 static int dsound_frames = 0; //default
 static int midivoices = 0; //Max voices INT
-static int maxcpu = 0; //CPU usage INT
-static int softwaremode = 0; //Software rendering
+static int maxcpu; //CPU usage INT
 static int frequency = 0; //Audio frequency
 static int sinc = 0; //Sinc
 static int tracks = 0; //Tracks limit
@@ -681,10 +680,11 @@ void load_settings()
 	RegQueryValueEx(hKey, L"sampframe", NULL, &dwType, (LPBYTE)&sampframe, &dwSize);
 	RegQueryValueEx(hKey, L"volume", NULL, &dwType, (LPBYTE)&volume, &dwSize);
 	RegQueryValueEx(hKey, L"cpu", NULL, &dwType, (LPBYTE)&maxcpu, &dwSize);
+	RegQueryValueEx(hKey, L"nofx", NULL, &dwType, (LPBYTE)&nofx, &dwSize);
 	RegQueryValueEx(hKey, L"frequency", NULL, &dwType, (LPBYTE)&frequency, &dwSize);
 	RegQueryValueEx(hKey, L"dsorxaudio", NULL, &dwType, (LPBYTE)&dsorxaudio, &dwSize);
 	RegQueryValueEx(hKey, L"sinc", NULL, &dwType, (LPBYTE)&sinc, &dwSize);
-	
+	RegQueryValueEx(hKey, L"noteoff", NULL, &dwType, (LPBYTE)&noteoff1, &dwSize);
 	RegCloseKey(hKey);
 	sound_out_volume_float = (float)volume / 10000.0f;
 	sound_out_volume_int = (int)(sound_out_volume_float * (float)0x1000);
@@ -780,39 +780,6 @@ int IsFloatingPointEnabled(){
 	return nofloat;
 }
 
-int AreEffectsDisabled(){
-	long lResult;
-	HKEY hKey;
-	DWORD dwType = REG_DWORD;
-	DWORD dwSize = sizeof(DWORD);
-	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\Keppy's MIDI Driver", 0, KEY_READ | KEY_WOW64_32KEY, &hKey);
-	RegQueryValueEx(hKey, L"nofx", NULL, &dwType, (LPBYTE)&nofx, &dwSize);
-	return nofx;
-}
-
-int IsNoteOff1TurnedOn(){
-	long lResult;
-	HKEY hKey;
-	DWORD dwType = REG_DWORD;
-	DWORD dwSize = sizeof(DWORD);
-	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\Keppy's MIDI Driver", 0, KEY_READ | KEY_WOW64_32KEY, &hKey);
-	RegQueryValueEx(hKey, L"noteoff", NULL, &dwType, (LPBYTE)&noteoff1, &dwSize);
-	return noteoff1;
-}
-
-int IsSoftwareModeEnabled()
-{
-	DWORD sinc = 0;
-	HKEY hKey;
-	long lResult;
-	DWORD dwType = REG_DWORD;
-	DWORD dwSize = sizeof(DWORD);
-	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\BASSMIDI Driver", 0, KEY_READ | KEY_WOW64_32KEY, &hKey);
-	RegQueryValueEx(hKey, L"softwaremode", NULL, &dwType, (LPBYTE)&softwaremode, &dwSize);
-	RegCloseKey(hKey);
-	return softwaremode;
-}
-
 int check_sinc()
 {
 	DWORD sinc = 0;
@@ -861,16 +828,47 @@ unsigned __stdcall threadfunc(LPVOID lpV){
 		int frequencyvalue = static_cast <int> (frequency);
 		int nofxvalue = static_cast <int> (nofx);
 		int sincvalue = static_cast <int> (sinc);
+		BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, 10);
+		BASS_SetConfig(BASS_CONFIG_GVOL_SAMPLE, 10);
+		BASS_SetConfig(BASS_CONFIG_GVOL_MUSIC, 10);
 		BASS_SetConfig(BASS_CONFIG_UPDATEPERIOD, 250);
 		BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, 8);
 		BASS_SetConfig(BASS_CONFIG_MIDI_VOICES, maxmidivoices);
 		OutputDebugString(L"Initializing the stream...");
 		if (BASS_Init(0, frequencyvalue + 100, 0, NULL, NULL)) {
-			hStream[0] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | (IsSoftwareModeEnabled() ? BASS_SAMPLE_SOFTWARE : softwaremode) | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (IsNoteOff1TurnedOn() ? BASS_MIDI_NOTEOFF1 : noteoff1) | (AreEffectsDisabled() ? BASS_MIDI_NOFX : nofx) | (check_sinc() ? BASS_MIDI_SINCINTER : sinc), frequencyvalue + 100);
-			BASS_ChannelSetAttribute(hStream[0], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			if ((noteoff1value == 0) && (nofxvalue == 0)) {
+				hStream[0] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (check_sinc() ? BASS_MIDI_SINCINTER : sinc), frequencyvalue + 100);
+				BASS_ChannelSetAttribute(hStream[0], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			}
+			else if ((noteoff1value == 0) && (nofxvalue == 1)) {
+				hStream[0] = BASS_MIDI_StreamCreate(16, BASS_STREAM_DECODE | BASS_MIDI_NOFX | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (check_sinc() ? BASS_MIDI_SINCINTER : 0), frequencyvalue + 100);
+				BASS_ChannelSetAttribute(hStream[0], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			}
+			else if ((noteoff1value == 1) && (nofxvalue == 0)) {
+				hStream[0] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | BASS_MIDI_NOTEOFF1 | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (check_sinc() ? BASS_MIDI_SINCINTER : 0), frequencyvalue + 100);
+				BASS_ChannelSetAttribute(hStream[0], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			}
+			else if ((noteoff1value == 1) && (nofxvalue == 1)) {
+				hStream[0] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | BASS_MIDI_NOFX | BASS_MIDI_NOTEOFF1 | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (check_sinc() ? BASS_MIDI_SINCINTER : 0), frequencyvalue + 100);
+				BASS_ChannelSetAttribute(hStream[0], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			}
 			if (!hStream[0]) continue;
-			hStream[1] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | (IsSoftwareModeEnabled() ? BASS_SAMPLE_SOFTWARE : softwaremode) | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (IsNoteOff1TurnedOn() ? BASS_MIDI_NOTEOFF1 : noteoff1) | (AreEffectsDisabled() ? BASS_MIDI_NOFX : nofx) | (check_sinc() ? BASS_MIDI_SINCINTER : sinc), frequencyvalue + 100);
+			if ((noteoff1value == 0) && (nofxvalue == 0)) {
+				hStream[1] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | (sound_out_float ? BASS_SAMPLE_FLOAT : 0) | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat), frequencyvalue + 100);
 				BASS_ChannelSetAttribute(hStream[1], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			}
+			else if ((noteoff1value == 0) && (nofxvalue == 1)) {
+				hStream[1] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | BASS_MIDI_NOFX | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (check_sinc() ? BASS_MIDI_SINCINTER : 0), frequencyvalue + 100);
+				BASS_ChannelSetAttribute(hStream[1], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			}
+			else if ((noteoff1value == 1) && (nofxvalue == 0)) {
+				hStream[1] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | BASS_MIDI_NOTEOFF1 | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (check_sinc() ? BASS_MIDI_SINCINTER : 0), frequencyvalue + 100);
+				BASS_ChannelSetAttribute(hStream[1], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			}
+			else if ((noteoff1value == 1) && (nofxvalue == 1)) {
+				hStream[1] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | BASS_MIDI_NOFX | BASS_MIDI_NOTEOFF1 | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (check_sinc() ? BASS_MIDI_SINCINTER : 0), frequencyvalue + 100);
+				BASS_ChannelSetAttribute(hStream[1], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			}
 			if (!hStream[1]) {
 				BASS_StreamFree(hStream[0]);
 				hStream[0] = 0;

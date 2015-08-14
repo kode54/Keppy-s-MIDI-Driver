@@ -27,7 +27,7 @@ Public Class MainWindow
         Else
             Not64Bit = "SOFTWARE\Keppy's MIDI Driver"
         End If
-        Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 195"
+        Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 200"
         Dim PortASFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist")
         If File.Exists(PortASFList) Then
             Dim reader As StreamReader = New StreamReader(New FileStream(PortASFList, FileMode.Open))
@@ -74,6 +74,8 @@ Public Class MainWindow
             keppykey.SetValue("polyphony", "1000", RegistryValueKind.DWord)
             keppykey.SetValue("preload", "1", RegistryValueKind.DWord)
             keppykey.SetValue("sampframe", "792", RegistryValueKind.DWord)
+            keppykey.SetValue("nofloat", "1", RegistryValueKind.DWord)
+            keppykey.SetValue("softwaremode", "0", RegistryValueKind.DWord)
             keppykey.SetValue("sinc", "1", RegistryValueKind.DWord)
             keppykey.SetValue("tracks", "128", RegistryValueKind.DWord)
             keppykey.SetValue("volume", "10000", RegistryValueKind.DWord)
@@ -131,6 +133,16 @@ Public Class MainWindow
                 DisableFX.Checked = True
             Else
                 DisableFX.Checked = False
+            End If
+            If keppykey.GetValue("softwaremode") = 1 Then
+                SoftwareRendering.Checked = True
+            Else
+                SoftwareRendering.Checked = False
+            End If
+            If keppykey.GetValue("nofloat") = 0 Then
+                FloatingDisabled.Checked = True
+            Else
+                FloatingDisabled.Checked = False
             End If
             If keppykey.GetValue("noteoff") = 1 Then
                 NoteOff.Checked = True
@@ -293,6 +305,16 @@ Public Class MainWindow
         Else
             keppykey.SetValue("noteoff", "0", RegistryValueKind.DWord)
         End If
+        If FloatingDisabled.Checked Then
+            keppykey.SetValue("nofloat", "0", RegistryValueKind.DWord)
+        Else
+            keppykey.SetValue("nofloat", "1", RegistryValueKind.DWord)
+        End If
+        If SoftwareRendering.Checked Then
+            keppykey.SetValue("softwaremode", "1", RegistryValueKind.DWord)
+        Else
+            keppykey.SetValue("softwaremode", "0", RegistryValueKind.DWord)
+        End If
         If Preload.Checked Then
             keppykey.SetValue("preload", "1", RegistryValueKind.DWord)
         Else
@@ -352,14 +374,27 @@ Public Class MainWindow
         PolyphonyLimit.Value = "512"
         bufsize.Value = 100
         VolumeBar.Value = 10000
+        MaxCPU.Text = "85"
         Preload.Checked = True
         SincInter.Checked = True
         DisableFX.Checked = False
+        SoftwareRendering.Checked = False
+        FloatingDisabled.Checked = False
         Dim keppykey = My.Computer.Registry.LocalMachine.OpenSubKey(Not64Bit, True)
         If NoteOff.Checked Then
             keppykey.SetValue("noteoff", "1", RegistryValueKind.DWord)
         Else
             keppykey.SetValue("noteoff", "0", RegistryValueKind.DWord)
+        End If
+        If FloatingDisabled.Checked Then
+            keppykey.SetValue("nofloat", "0", RegistryValueKind.DWord)
+        Else
+            keppykey.SetValue("nofloat", "1", RegistryValueKind.DWord)
+        End If
+        If SoftwareRendering.Checked Then
+            keppykey.SetValue("softwaremode", "1", RegistryValueKind.DWord)
+        Else
+            keppykey.SetValue("softwaremode", "0", RegistryValueKind.DWord)
         End If
         If Preload.Checked Then
             keppykey.SetValue("preload", "1", RegistryValueKind.DWord)
@@ -378,7 +413,7 @@ Public Class MainWindow
         End If
         keppykey.SetValue("dsorxaudio", "0", RegistryValueKind.DWord)
         keppykey.SetValue("polyphony", PolyphonyLimit.Value.ToString, RegistryValueKind.DWord)
-        keppykey.SetValue("cpu", "80", RegistryValueKind.DWord)
+        keppykey.SetValue("cpu", "85", RegistryValueKind.DWord)
         keppykey.SetValue("buflen", "10", RegistryValueKind.DWord)
         keppykey.SetValue("frequency", "44100", RegistryValueKind.DWord)
         keppykey.SetValue("sampframe", "792", RegistryValueKind.DWord)
@@ -416,4 +451,5 @@ Public Class MainWindow
         VolumeValue = Convert.ToInt32(x)
         CurrentVolumeHUE.Text = "Volume: " + VolumeValue.ToString
     End Sub
+
 End Class

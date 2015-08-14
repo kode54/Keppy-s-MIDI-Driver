@@ -44,6 +44,11 @@ Partial Class MainWindow
         Me.ImportSFPortB = New System.Windows.Forms.Button()
         Me.PortBBox = New System.Windows.Forms.ListBox()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.SoftwareRendering = New System.Windows.Forms.CheckBox()
+        Me.FloatingDisabled = New System.Windows.Forms.CheckBox()
+        Me.CurrentVolumeHUE = New System.Windows.Forms.Label()
+        Me.VolumeBar = New System.Windows.Forms.TrackBar()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Versionlabel = New System.Windows.Forms.Label()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -54,6 +59,8 @@ Partial Class MainWindow
         Me.AdvancedApply = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.DSPipe = New System.Windows.Forms.RadioButton()
         Me.XAudioPipe = New System.Windows.Forms.RadioButton()
@@ -77,24 +84,19 @@ Partial Class MainWindow
         Me.PortBOpenDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Information = New System.Windows.Forms.ToolTip(Me.components)
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.VolumeBar = New System.Windows.Forms.TrackBar()
-        Me.CurrentVolumeHUE = New System.Windows.Forms.Label()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
+        CType(Me.VolumeBar, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         CType(Me.TracksLimit, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.bufsize, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PolyphonyLimit, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox1.SuspendLayout()
-        CType(Me.VolumeBar, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -304,6 +306,61 @@ Partial Class MainWindow
         Me.TabPage3.Text = "Settings/Update"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.SoftwareRendering)
+        Me.GroupBox1.Controls.Add(Me.FloatingDisabled)
+        Me.GroupBox1.Controls.Add(Me.CurrentVolumeHUE)
+        Me.GroupBox1.Controls.Add(Me.VolumeBar)
+        Me.GroupBox1.Location = New System.Drawing.Point(8, 6)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(575, 74)
+        Me.GroupBox1.TabIndex = 6
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Volume"
+        '
+        'SoftwareRendering
+        '
+        Me.SoftwareRendering.AutoSize = True
+        Me.SoftwareRendering.Location = New System.Drawing.Point(196, 18)
+        Me.SoftwareRendering.Name = "SoftwareRendering"
+        Me.SoftwareRendering.Size = New System.Drawing.Size(143, 17)
+        Me.SoftwareRendering.TabIndex = 3
+        Me.SoftwareRendering.Text = "Force software rendering"
+        Me.SoftwareRendering.UseVisualStyleBackColor = True
+        '
+        'FloatingDisabled
+        '
+        Me.FloatingDisabled.AutoSize = True
+        Me.FloatingDisabled.Location = New System.Drawing.Point(8, 18)
+        Me.FloatingDisabled.Name = "FloatingDisabled"
+        Me.FloatingDisabled.Size = New System.Drawing.Size(182, 17)
+        Me.FloatingDisabled.TabIndex = 2
+        Me.FloatingDisabled.Text = "Disable 32-bit floating point audio"
+        Me.FloatingDisabled.UseVisualStyleBackColor = True
+        '
+        'CurrentVolumeHUE
+        '
+        Me.CurrentVolumeHUE.Font = New System.Drawing.Font("Trebuchet MS", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CurrentVolumeHUE.Location = New System.Drawing.Point(469, 11)
+        Me.CurrentVolumeHUE.Name = "CurrentVolumeHUE"
+        Me.CurrentVolumeHUE.Size = New System.Drawing.Size(100, 23)
+        Me.CurrentVolumeHUE.TabIndex = 1
+        Me.CurrentVolumeHUE.Text = "Volume: 100"
+        Me.CurrentVolumeHUE.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'VolumeBar
+        '
+        Me.VolumeBar.AutoSize = False
+        Me.VolumeBar.BackColor = System.Drawing.Color.White
+        Me.VolumeBar.Location = New System.Drawing.Point(4, 37)
+        Me.VolumeBar.Maximum = 10000
+        Me.VolumeBar.Name = "VolumeBar"
+        Me.VolumeBar.Size = New System.Drawing.Size(567, 33)
+        Me.VolumeBar.TabIndex = 0
+        Me.VolumeBar.TickFrequency = 100
+        Me.VolumeBar.TickStyle = System.Windows.Forms.TickStyle.Both
+        '
         'GroupBox3
         '
         Me.GroupBox3.Controls.Add(Me.Versionlabel)
@@ -419,6 +476,24 @@ Partial Class MainWindow
         Me.Panel1.Size = New System.Drawing.Size(303, 59)
         Me.Panel1.TabIndex = 16
         '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.Label11)
+        Me.Panel2.Location = New System.Drawing.Point(108, -1)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(194, 59)
+        Me.Panel2.TabIndex = 3
+        '
+        'Label11
+        '
+        Me.Label11.Location = New System.Drawing.Point(7, 9)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(179, 41)
+        Me.Label11.TabIndex = 0
+        Me.Label11.Text = "XAudio is actually much faster than DirectSound, in terms of" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "delay and soundfont" & _
+    " preloading." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Use DirectSound if your PC isn't powerful enough for XAudio."
+        Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Label9
         '
         Me.Label9.AutoSize = True
@@ -497,13 +572,14 @@ Partial Class MainWindow
         'sampframe
         '
         Me.sampframe.FormattingEnabled = True
-        Me.sampframe.Items.AddRange(New Object() {"262140", "131070", "65535", "32768", "16384", "8192", "4096", "2048", "1024"})
+        Me.sampframe.Items.AddRange(New Object() {"262140", "131070", "65535", "32768", "16384", "8192", "4096", "2048", "1024", "792"})
         Me.sampframe.Location = New System.Drawing.Point(505, 101)
         Me.sampframe.Name = "sampframe"
         Me.sampframe.Size = New System.Drawing.Size(64, 21)
         Me.sampframe.TabIndex = 11
-        Me.sampframe.Text = "262140"
-        Me.Information.SetToolTip(Me.sampframe, "This is just a setting to make the driver run faster with old PCs.")
+        Me.sampframe.Text = "792"
+        Me.Information.SetToolTip(Me.sampframe, "This is just a setting to make the driver run faster with old PCs. (792 is the de" & _
+        "fault/minimum value)")
         '
         'Label7
         '
@@ -603,6 +679,7 @@ Partial Class MainWindow
         'Preload
         '
         Me.Preload.AutoSize = True
+        Me.Preload.Enabled = False
         Me.Preload.Location = New System.Drawing.Point(6, 17)
         Me.Preload.Name = "Preload"
         Me.Preload.Size = New System.Drawing.Size(147, 17)
@@ -640,57 +717,6 @@ Partial Class MainWindow
         Me.Button1.Text = "Info"
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.CurrentVolumeHUE)
-        Me.GroupBox1.Controls.Add(Me.VolumeBar)
-        Me.GroupBox1.Location = New System.Drawing.Point(8, 6)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(575, 74)
-        Me.GroupBox1.TabIndex = 6
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Volume"
-        '
-        'VolumeBar
-        '
-        Me.VolumeBar.AutoSize = False
-        Me.VolumeBar.BackColor = System.Drawing.Color.White
-        Me.VolumeBar.Location = New System.Drawing.Point(4, 37)
-        Me.VolumeBar.Maximum = 10000
-        Me.VolumeBar.Name = "VolumeBar"
-        Me.VolumeBar.Size = New System.Drawing.Size(567, 33)
-        Me.VolumeBar.TabIndex = 0
-        Me.VolumeBar.TickFrequency = 100
-        Me.VolumeBar.TickStyle = System.Windows.Forms.TickStyle.Both
-        '
-        'CurrentVolumeHUE
-        '
-        Me.CurrentVolumeHUE.Font = New System.Drawing.Font("Trebuchet MS", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CurrentVolumeHUE.Location = New System.Drawing.Point(469, 11)
-        Me.CurrentVolumeHUE.Name = "CurrentVolumeHUE"
-        Me.CurrentVolumeHUE.Size = New System.Drawing.Size(100, 23)
-        Me.CurrentVolumeHUE.TabIndex = 1
-        Me.CurrentVolumeHUE.Text = "Volume: 100"
-        Me.CurrentVolumeHUE.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.Label11)
-        Me.Panel2.Location = New System.Drawing.Point(108, -1)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(194, 59)
-        Me.Panel2.TabIndex = 3
-        '
-        'Label11
-        '
-        Me.Label11.Location = New System.Drawing.Point(7, 9)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(179, 41)
-        Me.Label11.TabIndex = 0
-        Me.Label11.Text = "XAudio is actually much faster than DirectSound, in terms of" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "delay and soundfont" & _
-    " preloading." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Use DirectSound if your PC isn't powerful enough for XAudio."
-        Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'MainWindow
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -710,18 +736,19 @@ Partial Class MainWindow
         Me.TabPage2.ResumeLayout(False)
         Me.TabPage2.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        CType(Me.VolumeBar, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
         CType(Me.TracksLimit, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.bufsize, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PolyphonyLimit, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox1.ResumeLayout(False)
-        CType(Me.VolumeBar, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel2.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -783,5 +810,7 @@ Partial Class MainWindow
     Friend WithEvents VolumeBar As System.Windows.Forms.TrackBar
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents Label11 As System.Windows.Forms.Label
+    Friend WithEvents SoftwareRendering As System.Windows.Forms.CheckBox
+    Friend WithEvents FloatingDisabled As System.Windows.Forms.CheckBox
 
 End Class
