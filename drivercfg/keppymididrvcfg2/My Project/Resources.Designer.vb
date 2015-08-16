@@ -69,5 +69,14 @@ Namespace My.Resources
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
+        
+        '''<summary>
+        '''  Cerca una stringa localizzata simile a .
+        '''</summary>
+        Friend ReadOnly Property WhyFunctionsDisabled() As String
+            Get
+                Return ResourceManager.GetString("WhyFunctionsDisabled", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace

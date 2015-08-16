@@ -84,6 +84,7 @@ Partial Class MainWindow
         Me.PortBOpenDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Information = New System.Windows.Forms.ToolTip(Me.components)
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
@@ -293,6 +294,7 @@ Partial Class MainWindow
         '
         'TabPage3
         '
+        Me.TabPage3.Controls.Add(Me.LinkLabel1)
         Me.TabPage3.Controls.Add(Me.GroupBox1)
         Me.TabPage3.Controls.Add(Me.GroupBox3)
         Me.TabPage3.Controls.Add(Me.AdvancedReset)
@@ -327,6 +329,7 @@ Partial Class MainWindow
         Me.SoftwareRendering.Size = New System.Drawing.Size(143, 17)
         Me.SoftwareRendering.TabIndex = 3
         Me.SoftwareRendering.Text = "Force software rendering"
+        Me.Information.SetToolTip(Me.SoftwareRendering, "Force software rendering, instead of using the main hardware.")
         Me.SoftwareRendering.UseVisualStyleBackColor = True
         '
         'FloatingDisabled
@@ -337,6 +340,8 @@ Partial Class MainWindow
         Me.FloatingDisabled.Size = New System.Drawing.Size(182, 17)
         Me.FloatingDisabled.TabIndex = 2
         Me.FloatingDisabled.Text = "Disable 32-bit floating point audio"
+        Me.Information.SetToolTip(Me.FloatingDisabled, "Use 16-bit integer rendering instead of the 32-bit floating point one. (Useful fo" & _
+        "r old PCs)")
         Me.FloatingDisabled.UseVisualStyleBackColor = True
         '
         'CurrentVolumeHUE
@@ -544,8 +549,7 @@ Partial Class MainWindow
         Me.TracksLimit.Name = "TracksLimit"
         Me.TracksLimit.Size = New System.Drawing.Size(59, 20)
         Me.TracksLimit.TabIndex = 14
-        Me.Information.SetToolTip(Me.TracksLimit, "Limit the tracks for BASSMIDI. (It'll automatically merge them into the existing " & _
-        "ones)")
+        Me.Information.SetToolTip(Me.TracksLimit, "Limit the tracks for BASSMIDI. (The other tracks will be muted)")
         Me.TracksLimit.Value = New Decimal(New Integer() {10, 0, 0, 0})
         '
         'SincInter
@@ -556,7 +560,8 @@ Partial Class MainWindow
         Me.SincInter.Size = New System.Drawing.Size(141, 17)
         Me.SincInter.TabIndex = 13
         Me.SincInter.Text = "Enable sinc interpolation"
-        Me.Information.SetToolTip(Me.SincInter, "Enable the sinc interpolation. (Avoids audio corruptions, but uses more CPU)")
+        Me.Information.SetToolTip(Me.SincInter, "Enable the sinc interpolation. (Avoids audio corruptions, but can completely ruin" & _
+        " the audio with Black MIDIs)")
         Me.SincInter.UseVisualStyleBackColor = True
         '
         'Label8
@@ -621,7 +626,8 @@ Partial Class MainWindow
         Me.Frequency.Size = New System.Drawing.Size(64, 21)
         Me.Frequency.TabIndex = 7
         Me.Frequency.Text = "192000"
-        Me.Information.SetToolTip(Me.Frequency, "Change the audio frequency.")
+        Me.Information.SetToolTip(Me.Frequency, "Change the audio frequency. (WARNING: Setting an high value can potentially break" & _
+        " the audio)")
         '
         'Label5
         '
@@ -717,6 +723,16 @@ Partial Class MainWindow
         Me.Button1.Text = "Info"
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Location = New System.Drawing.Point(13, 332)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(236, 13)
+        Me.LinkLabel1.TabIndex = 7
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Why is software rendering forced to be enabled?"
+        '
         'MainWindow
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -736,6 +752,7 @@ Partial Class MainWindow
         Me.TabPage2.ResumeLayout(False)
         Me.TabPage2.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
+        Me.TabPage3.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.VolumeBar, System.ComponentModel.ISupportInitialize).EndInit()
@@ -812,5 +829,6 @@ Partial Class MainWindow
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents SoftwareRendering As System.Windows.Forms.CheckBox
     Friend WithEvents FloatingDisabled As System.Windows.Forms.CheckBox
+    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
 
 End Class

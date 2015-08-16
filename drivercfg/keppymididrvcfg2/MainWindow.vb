@@ -12,8 +12,8 @@ Public Class MainWindow
         Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
         Dim newestversion As String = sr.ReadToEnd()
         Dim currentversion As String = Application.ProductVersion
-        ThisVersionDriver.Text = "Your current version of the driver is: " + currentversion.ToString
-        LatestVersionDriver.Text = "The latest version of the driver is: " + newestversion.ToString
+        ThisVersionDriver.Text = "The current version of the driver, installed on your system, is: " + currentversion.ToString
+        LatestVersionDriver.Text = "The latest version online, in the GitHub repository, is: " + newestversion.ToString
         If currentversion >= newestversion Then
             UpdateDownload.Enabled = False
             UpdateDownload.Text = "Already updated"
@@ -27,7 +27,7 @@ Public Class MainWindow
         Else
             Not64Bit = "SOFTWARE\Keppy's MIDI Driver"
         End If
-        Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 200"
+        Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 204"
         Dim PortASFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist")
         If File.Exists(PortASFList) Then
             Dim reader As StreamReader = New StreamReader(New FileStream(PortASFList, FileMode.Open))
@@ -51,7 +51,6 @@ Public Class MainWindow
             MsgBox("The file " & Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist" & " can't be found, press OK to continue. (It'll be automatically created in a second)", 64, "Information")
             File.Create(Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist").Dispose()
         End If
-
         Dim osVer As Version = Environment.OSVersion.Version
         If osVer.Major = 10 Then
             Versionlabel.Text = "Your current O.S. is: Windows 10 or Windows Server 2016"
@@ -80,6 +79,11 @@ Public Class MainWindow
             keppykey.SetValue("tracks", "128", RegistryValueKind.DWord)
             keppykey.SetValue("volume", "10000", RegistryValueKind.DWord)
             keppykey.SetValue("dsorxaudio", "0", RegistryValueKind.DWord)
+            If osVer.Major >= 5 Then
+                SoftwareRendering.Checked = True
+                SoftwareRendering.Enabled = False
+                keppykey.SetValue("softwaremode", "1", RegistryValueKind.DWord)
+            End If
             PolyphonyLimit.Value = keppykey.GetValue("polyphony")
             bufsize.Value = keppykey.GetValue("buflen") * 10
             sampframe.Text = keppykey.GetValue("sampframe")
@@ -165,6 +169,11 @@ Public Class MainWindow
             Dim x As Double = VolumeBar.Value.ToString / 100
             VolumeValue = Convert.ToInt32(x)
             CurrentVolumeHUE.Text = "Volume: " + VolumeValue.ToString
+            If osVer.Major > 5 Then
+                SoftwareRendering.Checked = True
+                SoftwareRendering.Enabled = False
+                keppykey.SetValue("softwaremode", "1", RegistryValueKind.DWord)
+            End If
         End If
     End Sub
 
@@ -452,4 +461,7 @@ Public Class MainWindow
         CurrentVolumeHUE.Text = "Volume: " + VolumeValue.ToString
     End Sub
 
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        MsgBox(My.Resources.WhyFunctionsDisabled.ToString, 48, "Why is software rendering forced to be enabled?")
+    End Sub
 End Class

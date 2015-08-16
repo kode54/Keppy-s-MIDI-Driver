@@ -24,6 +24,9 @@
 /drivercfg/ipch
 /drivercfg/Release
 /drivercfg/Debug
+/drivercfg/keppymididrvcfg2/output
+/drivercfg/keppymididrvcfg2/bin
+/drivercfg/keppymididrvcfg2/obj
 /drivercfg/*.dll
 /drivercfg/*.exe
 /drivercfg/x64

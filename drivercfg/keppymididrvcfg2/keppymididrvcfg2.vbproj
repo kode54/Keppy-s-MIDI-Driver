@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="gear.ico" />
+    <None Include="Resources\WhyFunctionsDisabled.txt" />
     <None Include="Resources\keppymididrv.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

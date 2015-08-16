@@ -1,0 +1,1 @@
+Microsoft deprecated the hardware acceleration since the release of Windows Vista, that's why the option is enabled by default on your current system.
