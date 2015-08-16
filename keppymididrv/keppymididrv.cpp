@@ -906,11 +906,23 @@ BOOL ProcessBlackList(){
 		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
 		return 0;
 	}
+	else if (_tcscmp(modulename, _T("Steam.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
 	else if (_tcscmp(modulename, _T("sndvol.exe")) == 0){
 		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
 		return 0;
 	}
 	else if (_tcscmp(modulename, _T("sndvol32.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("vmware-hostd.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("vmware.exe")) == 0){
 		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
 		return 0;
 	}
