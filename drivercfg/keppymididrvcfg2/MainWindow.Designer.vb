@@ -43,7 +43,15 @@ Partial Class MainWindow
         Me.RemoveSFPortB = New System.Windows.Forms.Button()
         Me.ImportSFPortB = New System.Windows.Forms.Button()
         Me.PortBBox = New System.Windows.Forms.ListBox()
+        Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.RestoreDefaultBlackList = New System.Windows.Forms.Button()
+        Me.RemoveBlackList = New System.Windows.Forms.Button()
+        Me.AddBlackList = New System.Windows.Forms.Button()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.ProgramsBlackList = New System.Windows.Forms.ListBox()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.SoftwareRendering = New System.Windows.Forms.CheckBox()
         Me.FloatingDisabled = New System.Windows.Forms.CheckBox()
@@ -84,10 +92,11 @@ Partial Class MainWindow
         Me.PortBOpenDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Information = New System.Windows.Forms.ToolTip(Me.components)
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.BlackListFileDialog = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
+        Me.TabPage4.SuspendLayout()
         Me.TabPage3.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.VolumeBar, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -104,6 +113,7 @@ Partial Class MainWindow
         '
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
+        Me.TabControl1.Controls.Add(Me.TabPage4)
         Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
@@ -292,6 +302,79 @@ Partial Class MainWindow
         Me.PortBBox.Size = New System.Drawing.Size(502, 329)
         Me.PortBBox.TabIndex = 9
         '
+        'TabPage4
+        '
+        Me.TabPage4.Controls.Add(Me.CheckBox1)
+        Me.TabPage4.Controls.Add(Me.RestoreDefaultBlackList)
+        Me.TabPage4.Controls.Add(Me.RemoveBlackList)
+        Me.TabPage4.Controls.Add(Me.AddBlackList)
+        Me.TabPage4.Controls.Add(Me.Label10)
+        Me.TabPage4.Controls.Add(Me.ProgramsBlackList)
+        Me.TabPage4.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage4.Name = "TabPage4"
+        Me.TabPage4.Size = New System.Drawing.Size(591, 356)
+        Me.TabPage4.TabIndex = 3
+        Me.TabPage4.Text = "Driver blacklist"
+        Me.TabPage4.UseVisualStyleBackColor = True
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(4, 57)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(139, 17)
+        Me.CheckBox1.TabIndex = 15
+        Me.CheckBox1.Text = "Enable advanced mode"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
+        'RestoreDefaultBlackList
+        '
+        Me.RestoreDefaultBlackList.Location = New System.Drawing.Point(467, 49)
+        Me.RestoreDefaultBlackList.Name = "RestoreDefaultBlackList"
+        Me.RestoreDefaultBlackList.Size = New System.Drawing.Size(122, 23)
+        Me.RestoreDefaultBlackList.TabIndex = 14
+        Me.RestoreDefaultBlackList.Text = "Restore default"
+        Me.RestoreDefaultBlackList.UseVisualStyleBackColor = True
+        '
+        'RemoveBlackList
+        '
+        Me.RemoveBlackList.Location = New System.Drawing.Point(467, 26)
+        Me.RemoveBlackList.Name = "RemoveBlackList"
+        Me.RemoveBlackList.Size = New System.Drawing.Size(122, 23)
+        Me.RemoveBlackList.TabIndex = 13
+        Me.RemoveBlackList.Text = "Remove executable(s)"
+        Me.RemoveBlackList.UseVisualStyleBackColor = True
+        '
+        'AddBlackList
+        '
+        Me.AddBlackList.Location = New System.Drawing.Point(467, 3)
+        Me.AddBlackList.Name = "AddBlackList"
+        Me.AddBlackList.Size = New System.Drawing.Size(122, 23)
+        Me.AddBlackList.TabIndex = 12
+        Me.AddBlackList.Text = "Add executable(s)"
+        Me.AddBlackList.UseVisualStyleBackColor = True
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(1, 3)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(385, 52)
+        Me.Label10.TabIndex = 11
+        Me.Label10.Text = resources.GetString("Label10.Text")
+        '
+        'ProgramsBlackList
+        '
+        Me.ProgramsBlackList.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ProgramsBlackList.FormattingEnabled = True
+        Me.ProgramsBlackList.HorizontalScrollbar = True
+        Me.ProgramsBlackList.ItemHeight = 18
+        Me.ProgramsBlackList.Location = New System.Drawing.Point(3, 76)
+        Me.ProgramsBlackList.Name = "ProgramsBlackList"
+        Me.ProgramsBlackList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.ProgramsBlackList.Size = New System.Drawing.Size(585, 274)
+        Me.ProgramsBlackList.TabIndex = 10
+        '
         'TabPage3
         '
         Me.TabPage3.Controls.Add(Me.LinkLabel1)
@@ -307,6 +390,16 @@ Partial Class MainWindow
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "Settings/Update"
         Me.TabPage3.UseVisualStyleBackColor = True
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Location = New System.Drawing.Point(13, 332)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(236, 13)
+        Me.LinkLabel1.TabIndex = 7
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Why is software rendering forced to be enabled?"
         '
         'GroupBox1
         '
@@ -723,15 +816,10 @@ Partial Class MainWindow
         Me.Button1.Text = "Info"
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'LinkLabel1
+        'BlackListFileDialog
         '
-        Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(13, 332)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(236, 13)
-        Me.LinkLabel1.TabIndex = 7
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Why is software rendering forced to be enabled?"
+        Me.BlackListFileDialog.FileName = "Add an executable..."
+        Me.BlackListFileDialog.Multiselect = True
         '
         'MainWindow
         '
@@ -751,6 +839,8 @@ Partial Class MainWindow
         Me.TabPage1.PerformLayout()
         Me.TabPage2.ResumeLayout(False)
         Me.TabPage2.PerformLayout()
+        Me.TabPage4.ResumeLayout(False)
+        Me.TabPage4.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
@@ -830,5 +920,13 @@ Partial Class MainWindow
     Friend WithEvents SoftwareRendering As System.Windows.Forms.CheckBox
     Friend WithEvents FloatingDisabled As System.Windows.Forms.CheckBox
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
+    Friend WithEvents TabPage4 As System.Windows.Forms.TabPage
+    Friend WithEvents ProgramsBlackList As System.Windows.Forms.ListBox
+    Friend WithEvents RemoveBlackList As System.Windows.Forms.Button
+    Friend WithEvents AddBlackList As System.Windows.Forms.Button
+    Friend WithEvents Label10 As System.Windows.Forms.Label
+    Friend WithEvents BlackListFileDialog As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents RestoreDefaultBlackList As System.Windows.Forms.Button
+    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
 
 End Class

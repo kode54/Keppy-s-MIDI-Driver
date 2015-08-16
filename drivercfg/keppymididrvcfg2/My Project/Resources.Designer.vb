@@ -61,6 +61,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Cerca una stringa localizzata simile a Messing up with the default list can potentially hang/block your PC,
+        '''since the driver is loaded by some system processes. (Especially on Windows XP)
+        '''
+        '''Use this function carefully..
+        '''</summary>
+        Friend ReadOnly Property AdvancedBlackListWarning() As String
+            Get
+                Return ResourceManager.GetString("AdvancedBlackListWarning", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property keppymididrv() As System.Drawing.Bitmap
@@ -71,7 +83,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Cerca una stringa localizzata simile a .
+        '''  Cerca una stringa localizzata simile a Microsoft deprecated the hardware acceleration since the release of Windows Vista, that&apos;s why the option is enabled by default on your current system..
         '''</summary>
         Friend ReadOnly Property WhyFunctionsDisabled() As String
             Get

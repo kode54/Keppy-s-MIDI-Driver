@@ -4,9 +4,8 @@ Imports Microsoft.Win32
 
 Public Class MainWindow
 
-    
-
     Public Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        TabControl1.TabPages.Remove(TabPage4) 'Hidden feature!
         Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create("http://kaleidonkep99.altervista.org/downloads/keppydriverupdate.txt")
         Dim response As System.Net.HttpWebResponse = request.GetResponse()
         Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
@@ -27,7 +26,7 @@ Public Class MainWindow
         Else
             Not64Bit = "SOFTWARE\Keppy's MIDI Driver"
         End If
-        Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 204"
+        Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 207"
         Dim PortASFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist")
         If File.Exists(PortASFList) Then
             Dim reader As StreamReader = New StreamReader(New FileStream(PortASFList, FileMode.Open))
@@ -51,6 +50,49 @@ Public Class MainWindow
             MsgBox("The file " & Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist" & " can't be found, press OK to continue. (It'll be automatically created in a second)", 64, "Information")
             File.Create(Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist").Dispose()
         End If
+
+        Dim BlackList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist")
+        If File.Exists(BlackList) Then
+            Dim reader3 As StreamReader = New StreamReader(New FileStream(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist", FileMode.Open))
+            Do While Not reader3.EndOfStream
+                ProgramsBlackList.Items.Add(reader3.ReadLine())
+            Loop
+            reader3.Close()
+        Else
+            File.Create(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist").Dispose()
+            ProgramsBlackList.Items.Clear()
+            ProgramsBlackList.Items.Add("winlogon.exe")
+            ProgramsBlackList.Items.Add("wininit.exe")
+            ProgramsBlackList.Items.Add("audiodg.exe")
+            ProgramsBlackList.Items.Add("rundll32.exe")
+            ProgramsBlackList.Items.Add("taskhost.exe")
+            ProgramsBlackList.Items.Add("taskhostw.exe")
+            ProgramsBlackList.Items.Add("lsass.exe")
+            ProgramsBlackList.Items.Add("csrss.exe")
+            ProgramsBlackList.Items.Add("wininit.exe")
+            ProgramsBlackList.Items.Add("Gitter.exe")
+            ProgramsBlackList.Items.Add("Skype.exe")
+            ProgramsBlackList.Items.Add("Telegram.exe")
+            ProgramsBlackList.Items.Add("Steam.exe")
+            ProgramsBlackList.Items.Add("chrome.exe")
+            ProgramsBlackList.Items.Add("firefox.exe")
+            ProgramsBlackList.Items.Add("vmware-hostd.exe")
+            ProgramsBlackList.Items.Add("vmware.exe")
+            ProgramsBlackList.Items.Add("vmplayer.exe")
+
+            Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
+            Dim Filenum As Integer = FreeFile()
+            FileOpen(Filenum, BlackListText, OpenMode.Output)
+            FileClose()
+
+            Using SW As New IO.StreamWriter(BlackListText, True)
+                For Each itm As String In Me.ProgramsBlackList.Items
+                    SW.WriteLine(itm)
+                Next
+            End Using
+
+        End If
+
         Dim osVer As Version = Environment.OSVersion.Version
         If osVer.Major = 10 Then
             Versionlabel.Text = "Your current O.S. is: Windows 10 or Windows Server 2016"
@@ -63,7 +105,7 @@ Public Class MainWindow
         ElseIf osVer.Major = 6 And osVer.Minor = 0 Then
             Versionlabel.Text = "Your current O.S. is: Windows Vista or Windows Server 2008"
         ElseIf osVer.Major = 5 And osVer.Minor = 1 Then
-            Versionlabel.Text = "Your current O.S. is: Windows XP (Unsupported)"
+            Versionlabel.Text = "Your current O.S. is: Windows XP"
         End If
 
         If My.Computer.Registry.LocalMachine.OpenSubKey(Not64Bit, True) Is Nothing Then
@@ -463,5 +505,112 @@ Public Class MainWindow
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         MsgBox(My.Resources.WhyFunctionsDisabled.ToString, 48, "Why is software rendering forced to be enabled?")
+    End Sub
+
+    Private Sub AddBlackList_Click(sender As Object, e As EventArgs) Handles AddBlackList.Click
+        If CheckBox1.Checked = True Then
+            Dim AdvancedName As String
+            AdvancedName = InputBox("Type the name of the executable manually:" & vbCrLf & vbCrLf & "(Remember to add ''.exe'' at the end of the filename)", "Add executable(s)")
+            If AdvancedName <> "" Then
+                ProgramsBlackList.Items.Add(AdvancedName)
+            Else
+
+            End If
+        Else
+            Try
+                Dim strlist As New List(Of String)
+                Dim file As String
+                BlackListFileDialog.Filter = "Executables|*.exe|All files|*.*"
+                If BlackListFileDialog.ShowDialog = DialogResult.OK Then
+                    For Each file In BlackListFileDialog.FileNames
+                        Dim FileNameOnly As String
+                        FileNameOnly = System.IO.Path.GetFileName(file)
+                        strlist.Add(FileNameOnly)
+                        ProgramsBlackList.Items.Add(FileNameOnly)
+                    Next
+                End If
+            Catch ex As Exception
+            End Try
+            Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
+            Dim Filenum As Integer = FreeFile()
+
+            FileOpen(Filenum, BlackListText, OpenMode.Output)
+            FileClose()
+
+            Using SW As New IO.StreamWriter(BlackListText, True)
+                For Each itm As String In Me.ProgramsBlackList.Items
+                    SW.WriteLine(itm)
+                Next
+            End Using
+        End If
+        
+    End Sub
+
+    Private Sub RemoveBlackList_Click(sender As Object, e As EventArgs) Handles RemoveBlackList.Click
+        Dim lst As New List(Of Object)
+        For Each a As Object In ProgramsBlackList.SelectedItems
+            lst.Add(a)
+        Next
+        For Each a As Object In lst
+            ProgramsBlackList.Items.Remove(a)
+        Next
+        Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
+        Dim Filenum As Integer = FreeFile()
+        FileOpen(Filenum, BlackListText, OpenMode.Output)
+        FileClose()
+
+        Using SW As New IO.StreamWriter(BlackListText, True)
+            For Each itm As String In Me.ProgramsBlackList.Items
+                SW.WriteLine(itm)
+            Next
+        End Using
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles RestoreDefaultBlackList.Click
+        If CheckBox1.Checked = True Then
+            ProgramsBlackList.Items.Clear()
+        Else
+            ProgramsBlackList.Items.Clear()
+            ProgramsBlackList.Items.Add("winlogon.exe")
+            ProgramsBlackList.Items.Add("wininit.exe")
+            ProgramsBlackList.Items.Add("audiodg.exe")
+            ProgramsBlackList.Items.Add("rundll32.exe")
+            ProgramsBlackList.Items.Add("taskhost.exe")
+            ProgramsBlackList.Items.Add("taskhostw.exe")
+            ProgramsBlackList.Items.Add("lsass.exe")
+            ProgramsBlackList.Items.Add("csrss.exe")
+            ProgramsBlackList.Items.Add("wininit.exe")
+            ProgramsBlackList.Items.Add("Gitter.exe")
+            ProgramsBlackList.Items.Add("Skype.exe")
+            ProgramsBlackList.Items.Add("Telegram.exe")
+            ProgramsBlackList.Items.Add("Steam.exe")
+            ProgramsBlackList.Items.Add("chrome.exe")
+            ProgramsBlackList.Items.Add("firefox.exe")
+            ProgramsBlackList.Items.Add("vmware-hostd.exe")
+            ProgramsBlackList.Items.Add("vmware.exe")
+            ProgramsBlackList.Items.Add("vmplayer.exe")
+        End If
+
+        Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
+        Dim Filenum As Integer = FreeFile()
+        FileOpen(Filenum, BlackListText, OpenMode.Output)
+        FileClose()
+
+        Using SW As New IO.StreamWriter(BlackListText, True)
+            For Each itm As String In Me.ProgramsBlackList.Items
+                SW.WriteLine(itm)
+            Next
+        End Using
+
+        MsgBox("The list has been restored with the default values!", 64, "Success")
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        If CheckBox1.Checked = True Then
+            RestoreDefaultBlackList.Text = "Clear list"
+            MsgBox(My.Resources.AdvancedBlackListWarning.ToString, 48, "Wait!")
+        Else
+            RestoreDefaultBlackList.Text = "Restore default"
+        End If
     End Sub
 End Class

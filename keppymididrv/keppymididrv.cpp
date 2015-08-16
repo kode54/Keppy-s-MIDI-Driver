@@ -25,8 +25,11 @@ void _endthreadex(unsigned retval);
 #include <limits>
 #include <stdafx.h>
 #include <vector>
-#include "atlstr.h"
-#include "atlconv.h"
+#include <list>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <cctype>
 
 #define BASSDEF(f) (WINAPI *f)	// define the BASS/BASSMIDI functions as pointers
 #define BASSMIDIDEF(f) (WINAPI *f)	
@@ -610,6 +613,18 @@ static BOOL is_gs_reset(const unsigned char * data, unsigned size)
 	return TRUE;
 }
 
+bool compare_nocase(const std::string& first, const std::string& second)
+{
+	unsigned int i = 0;
+	while ((i<first.length()) && (i<second.length()))
+	{
+		if (tolower(first[i])<tolower(second[i])) return true;
+		else if (tolower(first[i])>tolower(second[i])) return false;
+		++i;
+	}
+	return (first.length() < second.length());
+}
+
 int bmsyn_play_some_data(void){
 	UINT uDeviceID;
 	UINT uMsg;
@@ -664,8 +679,6 @@ int bmsyn_play_some_data(void){
 	} while (InterlockedDecrement(&evbcount));
 	return played;
 }
-
-
 
 void load_settings()
 {
@@ -737,7 +750,6 @@ BOOL load_bassfuncs()
 	LOADBASSMIDIFUNCTION(BASS_MIDI_StreamLoadSamples);
 	OutputDebugString(L"Done.");
 
-
 	installpathlength = lstrlen(installpath) + 1;
 	lstrcat(pluginpath, installpath);
 	lstrcat(pluginpath, L"\\bass*.dll");
@@ -751,7 +763,6 @@ BOOL load_bassfuncs()
 		} while (FindNextFile(fh, &fd));
 		FindClose(fh);
 	}
-
 	return TRUE;
 }
 
@@ -814,7 +825,6 @@ int IsSoftwareModeEnabled()
 
 int check_sinc()
 {
-	DWORD sinc = 0;
 	HKEY hKey;
 	long lResult;
 	DWORD dwType = REG_DWORD;
@@ -826,9 +836,90 @@ int check_sinc()
 }
 
 BOOL ProcessBlackList(){
-	// I was actually going to make a blacklist, that prevent other processes to block the main DLL. I'll finish it later.
-	return 0x2;
+	/*
+	Rudimental blacklist system, I know, but it works!
+	What do we need more, right now?
+
+	If there's something better for it, just give me a shot by making a ticket here!
+	https://github.com/KaleidonKep99/Keppy-s-MIDI-Driver/pulls
+	*/
+	TCHAR modulename[MAX_PATH];
+	GetModuleFileName(NULL, modulename, MAX_PATH);
+	PathStripPath(modulename);
+	if (_tcscmp(modulename, _T("winlogon.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("wininit.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("svchost.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("csrss.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("taskhost.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("taskhostw.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("services.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("lsass.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("Gitter.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("chrome.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("firefox.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("explorer.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("Adobe QT32 Server.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("Telegram.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("Skype.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("sndvol.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else if (_tcscmp(modulename, _T("sndvol32.exe")) == 0){
+		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
+		return 0;
+	}
+	else{
+		OutputDebugString(L"Current process is not blacklisted. The driver is waiting for user command.");
+		return 0x2;
+	}
 }
+
 
 unsigned __stdcall threadfunc(LPVOID lpV){
 	unsigned i;
@@ -847,12 +938,12 @@ unsigned __stdcall threadfunc(LPVOID lpV){
 		if (sound_driver == NULL) {
 			sound_driver = dsorxaudio ? 0 : create_sound_out_xaudio2();
 			sound_out_float = TRUE;
-			const char * err = sound_driver ? sound_driver->open(g_msgwnd->get_hwnd(), frequency, 2, sound_out_float, SAMPLES_PER_FRAME, xaudio2_frames) : "Windows 8";
+			const char * err = sound_driver ? sound_driver->open(g_msgwnd->get_hwnd(), frequency + 100, 2, sound_out_float, SAMPLES_PER_FRAME, xaudio2_frames) : "Windows 8";
 			if (err) {
 				delete sound_driver;
 				sound_driver = create_sound_out_ds();
 				sound_out_float = TRUE;
-				err = sound_driver->open(g_msgwnd->get_hwnd(), frequency, 2, sound_out_float, SAMPLES_PER_FRAME, dsound_frames);
+				err = sound_driver->open(g_msgwnd->get_hwnd(), frequency + 100, 2, sound_out_float, SAMPLES_PER_FRAME, dsound_frames);
 			}
 		}
 		load_bassfuncs();
@@ -865,10 +956,10 @@ unsigned __stdcall threadfunc(LPVOID lpV){
 		OutputDebugString(L"Initializing the stream...");
 		if (BASS_Init(0, frequencyvalue + 100, 0, NULL, NULL)) {
 			hStream[0] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | (IsSoftwareModeEnabled() ? BASS_SAMPLE_SOFTWARE : softwaremode) | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (IsNoteOff1TurnedOn() ? BASS_MIDI_NOTEOFF1 : noteoff1) | (AreEffectsDisabled() ? BASS_MIDI_NOFX : nofx) | (check_sinc() ? BASS_MIDI_SINCINTER : sinc), frequencyvalue + 100);
-			BASS_ChannelSetAttribute(hStream[0], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			BASS_ChannelSetAttribute(hStream[0], BASS_ATTRIB_MIDI_CPU | BASS_ATTRIB_CPU, maxcpu);
 			if (!hStream[0]) continue;
 			hStream[1] = BASS_MIDI_StreamCreate(128, BASS_STREAM_DECODE | (IsSoftwareModeEnabled() ? BASS_SAMPLE_SOFTWARE : softwaremode) | (IsFloatingPointEnabled() ? BASS_SAMPLE_FLOAT : nofloat) | (IsNoteOff1TurnedOn() ? BASS_MIDI_NOTEOFF1 : noteoff1) | (AreEffectsDisabled() ? BASS_MIDI_NOFX : nofx) | (check_sinc() ? BASS_MIDI_SINCINTER : sinc), frequencyvalue + 100);
-				BASS_ChannelSetAttribute(hStream[1], BASS_ATTRIB_MIDI_CPU, maxcpu);
+			BASS_ChannelSetAttribute(hStream[1], BASS_ATTRIB_MIDI_CPU | BASS_ATTRIB_CPU, maxcpu);
 			if (!hStream[1]) {
 				BASS_StreamFree(hStream[0]);
 				hStream[0] = 0;
