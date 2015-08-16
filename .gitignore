@@ -38,5 +38,6 @@
 /sfpacker/*.dll
 /sfpacker/*.exe
 /output/
+*.tmp
 git_ver.h
-bassmididrv.exe
+keppymididrv.exe

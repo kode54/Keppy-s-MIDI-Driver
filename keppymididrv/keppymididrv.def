@@ -1,4 +1,4 @@
-LIBRARY      "bassmididrv.dll"
+LIBRARY      "keppymididrv.dll"
 EXPORTS
 	DriverProc PRIVATE
 	modMessage PRIVATE

@@ -25,6 +25,8 @@ void _endthreadex(unsigned retval);
 #include <limits>
 #include <stdafx.h>
 #include <vector>
+#include "atlstr.h"
+#include "atlconv.h"
 
 #define BASSDEF(f) (WINAPI *f)	// define the BASS/BASSMIDI functions as pointers
 #define BASSMIDIDEF(f) (WINAPI *f)	
@@ -35,7 +37,6 @@ void _endthreadex(unsigned retval);
 #include <bassmidi.h>
 
 #include "sound_out.h"
-
 
 #define MAX_DRIVERS 2
 #define MAX_CLIENTS 1 // Per driver
@@ -668,7 +669,6 @@ int bmsyn_play_some_data(void){
 
 void load_settings()
 {
-	int config_volume;
 	HKEY hKey;
 	long lResult;
 	DWORD dwType = REG_DWORD;
@@ -802,7 +802,6 @@ int IsNoteOff1TurnedOn(){
 
 int IsSoftwareModeEnabled()
 {
-	DWORD sinc = 0;
 	HKEY hKey;
 	long lResult;
 	DWORD dwType = REG_DWORD;
@@ -824,6 +823,11 @@ int check_sinc()
 	RegQueryValueEx(hKey, L"sinc", NULL, &dwType, (LPBYTE)&sinc, &dwSize);
 	RegCloseKey(hKey);
 	return sinc;
+}
+
+BOOL ProcessBlackList(){
+	// I was actually going to make a blacklist, that prevent other processes to block the main DLL. I'll finish it later.
+	return 0x2;
 }
 
 unsigned __stdcall threadfunc(LPVOID lpV){
@@ -852,15 +856,9 @@ unsigned __stdcall threadfunc(LPVOID lpV){
 			}
 		}
 		load_bassfuncs();
-		int config_volume;
 		float trackslimit = static_cast <int> (tracks);
-		float volumelimit = static_cast <int> (volume);
 		int maxmidivoices = static_cast <int> (midivoices);
-		int nofloatvalue = static_cast <int> (nofloat);
-		int noteoff1value = static_cast <int> (noteoff1);
 		int frequencyvalue = static_cast <int> (frequency);
-		int nofxvalue = static_cast <int> (nofx);
-		int sincvalue = static_cast <int> (sinc);
 		BASS_SetConfig(BASS_CONFIG_UPDATEPERIOD, 250);
 		BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, 8);
 		BASS_SetConfig(BASS_CONFIG_MIDI_VOICES, maxmidivoices);
@@ -1113,7 +1111,7 @@ STDAPI_(DWORD) modMessage(UINT uDeviceID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR
 	case MODM_UNPREPARE:
 		return MMSYSERR_NOTSUPPORTED;
 	case MODM_GETNUMDEVS:
-		return 0x2;
+		return ProcessBlackList();
 	case MODM_GETDEVCAPS:
 		return modGetCaps(uDeviceID, reinterpret_cast<MIDIOUTCAPS*>(dwParam1), static_cast<DWORD>(dwParam2));
 	case MODM_LONGDATA:
@@ -1127,6 +1125,7 @@ STDAPI_(DWORD) modMessage(UINT uDeviceID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR
 		}
 		else{
 			memcpy(sysexbuffer, IIMidiHdr->lpData, exlen);
+
 #ifdef DEBUG
 			FILE * logfile;
 			logfile = fopen("c:\\dbglog.log", "at");
@@ -1169,7 +1168,6 @@ STDAPI_(DWORD) modMessage(UINT uDeviceID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR
 			} while (evbcount >= EVBUFF_SIZE);
 		}
 		return MMSYSERR_NOERROR;
-
 	case MODM_GETVOLUME: {
 		*(LONG*)dwParam1 = static_cast<LONG>(sound_out_volume_float * 0xFFFF);
 		return MMSYSERR_NOERROR;
@@ -1179,7 +1177,6 @@ STDAPI_(DWORD) modMessage(UINT uDeviceID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR
 		sound_out_volume_int = (int)(sound_out_volume_float * (float)0x1000);
 		return MMSYSERR_NOERROR;
 	}
-
 	case MODM_RESET:
 		DoResetClient(uDeviceID);
 		return MMSYSERR_NOERROR;
