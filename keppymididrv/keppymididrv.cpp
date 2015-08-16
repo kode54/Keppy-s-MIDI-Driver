@@ -806,7 +806,7 @@ int IsSoftwareModeEnabled()
 	long lResult;
 	DWORD dwType = REG_DWORD;
 	DWORD dwSize = sizeof(DWORD);
-	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\BASSMIDI Driver", 0, KEY_READ | KEY_WOW64_32KEY, &hKey);
+	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\Keppy's MIDI Driver", 0, KEY_READ | KEY_WOW64_32KEY, &hKey);
 	RegQueryValueEx(hKey, L"softwaremode", NULL, &dwType, (LPBYTE)&softwaremode, &dwSize);
 	RegCloseKey(hKey);
 	return softwaremode;
@@ -819,7 +819,7 @@ int check_sinc()
 	long lResult;
 	DWORD dwType = REG_DWORD;
 	DWORD dwSize = sizeof(DWORD);
-	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\BASSMIDI Driver", 0, KEY_READ | KEY_WOW64_32KEY, &hKey);
+	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\Keppy's MIDI Driver", 0, KEY_READ | KEY_WOW64_32KEY, &hKey);
 	RegQueryValueEx(hKey, L"sinc", NULL, &dwType, (LPBYTE)&sinc, &dwSize);
 	RegCloseKey(hKey);
 	return sinc;
