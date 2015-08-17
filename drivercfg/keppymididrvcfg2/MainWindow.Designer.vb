@@ -44,7 +44,7 @@ Partial Class MainWindow
         Me.ImportSFPortB = New System.Windows.Forms.Button()
         Me.PortBBox = New System.Windows.Forms.ListBox()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.BlackListAdvancedMode = New System.Windows.Forms.CheckBox()
         Me.RestoreDefaultBlackList = New System.Windows.Forms.Button()
         Me.RemoveBlackList = New System.Windows.Forms.Button()
         Me.AddBlackList = New System.Windows.Forms.Button()
@@ -304,7 +304,7 @@ Partial Class MainWindow
         '
         'TabPage4
         '
-        Me.TabPage4.Controls.Add(Me.CheckBox1)
+        Me.TabPage4.Controls.Add(Me.BlackListAdvancedMode)
         Me.TabPage4.Controls.Add(Me.RestoreDefaultBlackList)
         Me.TabPage4.Controls.Add(Me.RemoveBlackList)
         Me.TabPage4.Controls.Add(Me.AddBlackList)
@@ -317,15 +317,15 @@ Partial Class MainWindow
         Me.TabPage4.Text = "Driver blacklist"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
-        'CheckBox1
+        'BlackListAdvancedMode
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(4, 57)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(139, 17)
-        Me.CheckBox1.TabIndex = 15
-        Me.CheckBox1.Text = "Enable advanced mode"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.BlackListAdvancedMode.AutoSize = True
+        Me.BlackListAdvancedMode.Location = New System.Drawing.Point(4, 57)
+        Me.BlackListAdvancedMode.Name = "BlackListAdvancedMode"
+        Me.BlackListAdvancedMode.Size = New System.Drawing.Size(222, 17)
+        Me.BlackListAdvancedMode.TabIndex = 15
+        Me.BlackListAdvancedMode.Text = "I want to add the program name by myself"
+        Me.BlackListAdvancedMode.UseVisualStyleBackColor = True
         '
         'RestoreDefaultBlackList
         '
@@ -365,14 +365,14 @@ Partial Class MainWindow
         '
         'ProgramsBlackList
         '
-        Me.ProgramsBlackList.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ProgramsBlackList.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ProgramsBlackList.FormattingEnabled = True
         Me.ProgramsBlackList.HorizontalScrollbar = True
-        Me.ProgramsBlackList.ItemHeight = 18
+        Me.ProgramsBlackList.ItemHeight = 14
         Me.ProgramsBlackList.Location = New System.Drawing.Point(3, 76)
         Me.ProgramsBlackList.Name = "ProgramsBlackList"
         Me.ProgramsBlackList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ProgramsBlackList.Size = New System.Drawing.Size(585, 274)
+        Me.ProgramsBlackList.Size = New System.Drawing.Size(585, 270)
         Me.ProgramsBlackList.TabIndex = 10
         '
         'TabPage3
@@ -927,6 +927,6 @@ Partial Class MainWindow
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents BlackListFileDialog As System.Windows.Forms.OpenFileDialog
     Friend WithEvents RestoreDefaultBlackList As System.Windows.Forms.Button
-    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents BlackListAdvancedMode As System.Windows.Forms.CheckBox
 
 End Class

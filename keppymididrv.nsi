@@ -102,6 +102,7 @@ Section "Needed (required)"
    File output\keppymididrvcfg.exe
    File output\keppymididrv.dll
    File output\sfpacker.exe
+   File output\blacklist.txt
 !ifndef INNER
    File $%TEMP%\keppymididrvuninstall.exe
 !endif
@@ -113,12 +114,6 @@ Section "Needed (required)"
    File output\64\bass_mpc.dll
    File output\64\bassmidi.dll
    File output\64\keppymididrv.dll
-   File output\vcredist_x86.exe
-   File output\vcredist_x64.exe
-   DetailPrint "Installing Visual C++ 2013 x86..."
-   ExecWait '"vcredist_x86.exe" /passive'
-   DetailPrint "Installing Visual C++ 2013 x64..."
-   ExecWait '"vcredist_x64.exe" /passive'
    ;check if already installed
    StrCpy  $1 "0"
 LOOP1:
@@ -170,13 +165,11 @@ NEXT2:
    File output\bassmidi.dll 
    File output\keppymididrv.dll 
    File output\keppymididrvcfg.exe
+   File output\blacklist.txt
    File output\sfpacker.exe
-   DetailPrint "Installing Visual C++ 2013 x86..."
-   File output\vcredist_x86.exe
 !ifndef INNER
    File $%TEMP%\keppymididrvuninstall.exe
 !endif
-   ExecWait '"VCRedist_x86.exe" /passive'
    ;check if already installed
    StrCpy  $1 "0"
 
@@ -200,7 +193,7 @@ NEXT3:
    ${EndIf}
 REGDONE:
   ; Write the uninstall keys
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "DisplayName" "Keppy's MIDI Driver 1.5 (Bugfix 200)"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "DisplayName" "Keppy's MIDI Driver 1.5 (Bugfix 210)"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "NoRepair" 1
   WriteRegDWORD HKLM "Software\Keppy's MIDI Driver" "volume" "10000"
@@ -257,6 +250,7 @@ REGDONE:
    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "UninstallString" '"$WINDIR\System32\keppymididrv\keppymididrvuninstall.exe"'
    CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\Uninstall.lnk" "$WINDIR\System32\keppymididrv\keppymididrvuninstall.exe" "" "$WINDIR\System32\keppymididrv\keppymididrvuninstall.exe" 0
    CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\SoundFont Packer.lnk" "$WINDIR\System32\keppymididrv\sfpacker.exe" "" "$WINDIR\System32\sfpacker.exe" 0
+   CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\Configure Keppy's MIDI Driver.lnk" "$WINDIR\System32\keppymididrv\keppymididrvcfg.exe" "" "$WINDIR\System32\keppymididrv\keppymididrvcfg" 0
    ${EndIf}
    MessageBox MB_OK "Installation complete! Use the driver configuration tool which is in the 'Keppy's MIDI Driver' program shortcut directory to configure the driver."
    
@@ -299,6 +293,7 @@ ${Else}
   ${DeleteOnReboot} $WINDIR\SysWow64\keppymididrv\keppymididrvcfg.exe
    ${DeleteOnReboot} $WINDIR\SysWow64\keppymididrv\bassflac.dll
    ${DeleteOnReboot} $WINDIR\SysWow64\keppymididrv\basswv.dll
+   ${DeleteOnReboot} $WINDIR\SysWow64\keppymididrv\blacklist.txt
    ${DeleteOnReboot} $WINDIR\SysWow64\keppymididrv\bassopus.dll
    ${DeleteOnReboot} $WINDIR\SysWow64\keppymididrv\sfpacker.exe
   ${DeleteOnReboot} $WINDIR\SysNative\keppymididrv\bass.dll
@@ -308,8 +303,6 @@ ${Else}
    ${DeleteOnReboot} $WINDIR\SysNative\keppymididrv\bassflac.dll
    ${DeleteOnReboot} $WINDIR\SysNative\keppymididrv\basswv.dll
    ${DeleteOnReboot} $WINDIR\SysNative\keppymididrv\bassopus.dll
-   ${DeleteOnReboot} $WINDIR\SysWow64\keppymididrv\vcredist_x64.exe
-   ${DeleteOnReboot} $WINDIR\SysWow64\keppymididrv\vcredist_x86.exe
   Reboot
 ${Endif}
 ${Else}
@@ -321,14 +314,13 @@ ${Else}
   ${DeleteOnReboot} $WINDIR\System32\keppymididrv\bassmidi.dll
   ${DeleteOnReboot} $WINDIR\System32\keppymididrv\keppymididrv.dll
   ${DeleteOnReboot} $WINDIR\System32\keppymididrv\bass_mpc.dll 
+  ${DeleteOnReboot} $WINDIR\System32\keppymididrv\blacklist.txt
   ${DeleteOnReboot} $WINDIR\System32\keppymididrv\keppymididrvuninstall.exe
   ${DeleteOnReboot} $WINDIR\System32\keppymididrv\keppymididrvcfg.exe
   ${DeleteOnReboot} $WINDIR\System32\keppymididrv\bassflac.dll
   ${DeleteOnReboot} $WINDIR\System32\keppymididrv\basswv.dll
   ${DeleteOnReboot} $WINDIR\System32\keppymididrv\bassopus.dll
   ${DeleteOnReboot} $WINDIR\System32\keppymididrv\sfpacker.exe
-  ${DeleteOnReboot} $WINDIR\System32\keppymididrv\vcredist_x64.exe
-  ${DeleteOnReboot} $WINDIR\System32\keppymididrv\vcredist_x86.exe
   Reboot
 ${Endif}
 ${EndIf}

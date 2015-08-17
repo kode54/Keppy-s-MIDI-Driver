@@ -836,99 +836,28 @@ int check_sinc()
 }
 
 BOOL ProcessBlackList(){
-	/*
-	Rudimental blacklist system, I know, but it works!
-	What do we need more, right now?
-
-	If there's something better for it, just give me a shot by making a ticket here!
-	https://github.com/KaleidonKep99/Keppy-s-MIDI-Driver/pulls
-	*/
+	TCHAR string[MAX_PATH];
+	TCHAR blacklistdirectory[MAX_PATH];
 	TCHAR modulename[MAX_PATH];
-	GetModuleFileName(NULL, modulename, MAX_PATH);
-	PathStripPath(modulename);
-	if (_tcscmp(modulename, _T("winlogon.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
+	try {
+		GetModuleFileName(NULL, modulename, MAX_PATH);
+		PathStripPath(modulename);
+		if (GetWindowsDirectory(blacklistdirectory, MAX_PATH)) {
+			_tcscat(blacklistdirectory, L"\\keppymididrv.blacklist");
+			std::wifstream file(blacklistdirectory);
+			OutputDebugString(blacklistdirectory);
+			while (file.getline(string, sizeof(string) / sizeof(*string)))
+			{
+				if (_tcscmp(modulename, string) == 0) {
+					return 0;
+				}
+			}
+			return 0x2;
+		}
+		
 	}
-	else if (_tcscmp(modulename, _T("wininit.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("svchost.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("csrss.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("taskhost.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("taskhostw.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("services.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("lsass.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("Gitter.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("chrome.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("firefox.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("explorer.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("Adobe QT32 Server.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("Telegram.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("Skype.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("Steam.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("sndvol.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("sndvol32.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("vmware-hostd.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else if (_tcscmp(modulename, _T("vmware.exe")) == 0){
-		OutputDebugString(L"Current process is blacklisted. Unloading DLL...");
-		return 0;
-	}
-	else{
-		OutputDebugString(L"Current process is not blacklisted. The driver is waiting for user command.");
-		return 0x2;
+	catch (std::exception & e) {
+		OutputDebugStringA(e.what());
 	}
 }
 

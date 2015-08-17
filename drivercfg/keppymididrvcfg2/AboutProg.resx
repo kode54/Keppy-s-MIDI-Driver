@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="RichTextBox1.Text" xml:space="preserve">
-    <value>Keppy's MIDI Driver (Version 1.5, Bugfix 207)
+    <value>Keppy's MIDI Driver (Version 1.5, Bugfix 210)
 Original version by Kode54, libraries by un4seen.
 
-Compiled in: August 17, 2015 (1:32:48 AM, GMT +1)
+Compiled in: August 17, 2015 (6:31:48 AM, GMT +1)
 Target OS: Microsoft Windows 10 Pro (Service Release 1, 64-bit)
 Compiler used: Microsoft Visual Studio 2013 (Update 2)
 
 Thanks to AudioTestsNReviews, Kode54, CoolSoft, TheLighteater12 and other nice people,
 for helping me through the development of this standalone MIDI driver!
-(Ex-BASSMIDI Driver mod)</value>
+(Especially thanks to Kode54, for helping me through the blacklist system. You're awesome!)</value>
   </data>
   <metadata name="UpdateTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

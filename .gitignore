@@ -41,7 +41,10 @@
 /sfpacker/Debug
 /sfpacker/*.dll
 /sfpacker/*.exe
-/output/
+/output/*.exe
+/output/*.dll
+/output/64
 *.tmp
 git_ver.h
 keppymididrv.exe
+README.txt
