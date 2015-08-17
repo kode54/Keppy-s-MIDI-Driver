@@ -12,7 +12,7 @@ I optimized this fork by doing these things:
 ## System requirements
 - A CPU that supports CMPXCHG8b, running at 166MHz
 - 32MB of RAM (for basic soundfonts)
-- Microsoft Visual C++ 2013 & .NET Framework 4.0
+- [Microsoft Visual C++ 2013] (https://www.microsoft.com/en-us/download/details.aspx?id=40784) & [.NET Framework 4.0] (http://www.microsoft.com/en-us/download/details.aspx?id=17851)
 - Windows XP SP3 or greater
 
 ## Are you trying to overshadow the original project?
