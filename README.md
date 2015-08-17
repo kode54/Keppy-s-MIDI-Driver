@@ -10,10 +10,17 @@ I optimized this fork by doing these things:
 - Better UI for the configurator
 
 ## System requirements
+To use the driver, you need:
 - A CPU that supports CMPXCHG8b, running at 166MHz
 - 32MB of RAM (for basic soundfonts)
 - [Microsoft Visual C++ 2013] (https://www.microsoft.com/en-us/download/details.aspx?id=40784) & [.NET Framework 4.0] (http://www.microsoft.com/en-us/download/details.aspx?id=17851)
 - Windows XP SP3 or greater
+
+To compile (and test) the driver, you need:
+- Microsoft Visual Studio 2013
+- A CPU that supports CMPXCHG16b, running at 733MHz (For Microsoft Visual Studio 2013)
+- 768MB of RAM (for both soundfonts and Microsoft Visual Studio 2013)
+- Windows 7 SP1 or greater (Otherwise, no VS2013 for you)
 
 ## Are you trying to overshadow the original project?
 Absolutely no, Kode54's driver is better than mine tho. (His code is more cleaner, and way more stable)
