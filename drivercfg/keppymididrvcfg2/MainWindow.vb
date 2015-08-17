@@ -4,6 +4,8 @@ Imports Microsoft.Win32
 
 Public Class MainWindow
 
+    Public Declare Function GetAsyncKeyState Lib "user32.dll" (ByVal vKey As Int32) As UShort
+
     Public Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create("http://kaleidonkep99.altervista.org/downloads/keppydriverupdate.txt")
         Dim response As System.Net.HttpWebResponse = request.GetResponse()
@@ -25,7 +27,7 @@ Public Class MainWindow
         Else
             Not64Bit = "SOFTWARE\Keppy's MIDI Driver"
         End If
-        Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 210"
+        Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 213"
         Dim PortASFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist")
         If File.Exists(PortASFList) Then
             Dim reader As StreamReader = New StreamReader(New FileStream(PortASFList, FileMode.Open))
@@ -60,7 +62,7 @@ Public Class MainWindow
         Else
             File.Create(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist").Dispose()
             ProgramsBlackList.Items.Clear()
-            Dim lines() As String = IO.File.ReadAllLines("blacklist.txt")
+            Dim lines() As String = IO.File.ReadAllLines(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist")
             ProgramsBlackList.Items.AddRange(lines)
 
             Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
@@ -381,8 +383,8 @@ Public Class MainWindow
         keppykey.SetValue("volume", VolumeBar.Value.ToString, RegistryValueKind.DWord)
         Dim uoh As Integer
         uoh = Int(bufsize.Value.ToString / 10)
-        If uoh <= 5 Then
-            MsgBox("You're setting the buffer size to a value that is less than 60! Expect some stuttering and break-ups during playback!" & vbCrLf & vbCrLf & "Settings saved!", 48, "Warning!")
+        If uoh < 5 Then
+            MsgBox("You're setting the buffer size to a value that is less than 50! Expect some stuttering and break-ups during playback!" & vbCrLf & vbCrLf & "Settings saved!", 48, "Warning!")
         Else
             MsgBox("Settings saved!", 64, "Success")
         End If
@@ -487,18 +489,13 @@ Public Class MainWindow
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        MsgBox(My.Resources.WhyFunctionsDisabled.ToString, 48, "Why is software rendering forced to be enabled?")
+        MsgBox(My.Resources.WhyFunctionsDisabled.ToString, 48, "Why is software rendering enabled by default?")
     End Sub
 
     Private Sub AddBlackList_Click(sender As Object, e As EventArgs) Handles AddBlackList.Click
         If BlackListAdvancedMode.Checked = True Then
-            Dim AdvancedName As String
-            AdvancedName = InputBox("Type the name of the executable manually:" & vbCrLf & vbCrLf & "(Remember to add ''.exe'' at the end of the filename)", "Add executable(s)")
-            If AdvancedName <> "" Then
-                ProgramsBlackList.Items.Add(AdvancedName)
-            Else
+            ProgramsBlackList.Items.Add(ManualBlackList.Text)
 
-            End If
             Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
             Dim Filenum As Integer = FreeFile()
 
@@ -510,6 +507,7 @@ Public Class MainWindow
                     SW.WriteLine(itm)
                 Next
             End Using
+            ProgramsBlackList.TopIndex = ProgramsBlackList.Items.Count - 1
         Else
             Try
                 Dim strlist As New List(Of String)
@@ -536,6 +534,7 @@ Public Class MainWindow
                     SW.WriteLine(itm)
                 Next
             End Using
+            ProgramsBlackList.TopIndex = ProgramsBlackList.Items.Count - 1
         End If
 
     End Sub
@@ -562,7 +561,7 @@ Public Class MainWindow
 
     Private Sub RestoreDefaultBlackList_Click(sender As Object, e As EventArgs) Handles RestoreDefaultBlackList.Click
         ProgramsBlackList.Items.Clear()
-        Dim lines() As String = IO.File.ReadAllLines("blacklist.txt")
+        Dim lines() As String = IO.File.ReadAllLines(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist")
         ProgramsBlackList.Items.AddRange(lines)
         Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
         Dim Filenum As Integer = FreeFile()
@@ -578,4 +577,40 @@ Public Class MainWindow
         MsgBox("The list has been restored with the default values!", 64, "Success")
     End Sub
 
+    Private Sub BlackListAdvancedMode_CheckedChanged(sender As Object, e As EventArgs) Handles BlackListAdvancedMode.CheckedChanged
+        If BlackListAdvancedMode.Checked = True Then
+            Label12.Text = "Type the name of the program in the textbox, and confirm by pressing the ''Enter'' key."
+            AddBlackList.Text = "Add executable"
+            ManualBlackListLabel.Enabled = True
+            ManualBlackListLabel.Visible = True
+            ManualBlackList.Enabled = True
+            ManualBlackList.Visible = True
+        Else
+            Label12.Text = "Select a program by clicking ''Add executable(s)''."
+            AddBlackList.Text = "Add executable(s)"
+            ManualBlackListLabel.Enabled = False
+            ManualBlackListLabel.Visible = False
+            ManualBlackList.Enabled = False
+            ManualBlackList.Visible = False
+        End If
+    End Sub
+
+    Private Sub ManualBlackList_KeyDown(sender As Object, e As EventArgs) Handles ManualBlackList.KeyDown
+        If GetAsyncKeyState(Keys.Enter) Then
+            ProgramsBlackList.Items.Add(ManualBlackList.Text)
+
+            Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
+            Dim Filenum As Integer = FreeFile()
+
+            FileOpen(Filenum, BlackListText, OpenMode.Output)
+            FileClose()
+
+            Using SW As New IO.StreamWriter(BlackListText, True)
+                For Each itm As String In Me.ProgramsBlackList.Items
+                    SW.WriteLine(itm)
+                Next
+            End Using
+            ProgramsBlackList.TopIndex = ProgramsBlackList.Items.Count - 1
+        End If
+    End Sub
 End Class

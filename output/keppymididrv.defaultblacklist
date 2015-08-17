@@ -6,7 +6,9 @@ lsass.exe
 explorer.exe
 taskhost.exe
 taskhostw.exe
+sihost.exe
 spoolsv.exe
+WUDFHost.exe
 CCC.exe
 vmware-hostd.exe
 vmware.exe
@@ -18,9 +20,13 @@ TeamViewer_Desktop.exe
 TeamViewer_Service.exe
 Dreamweaver.exe
 Photoshop.exe
+volumouse.exe
+volumouse32.exe
 AfterFX.exe
 Telegram.exe
 Steam.exe
+SteamService.exe
+steamwebhelper.exe
 Skype.exe
 Gitter.exe
 chrome.exe

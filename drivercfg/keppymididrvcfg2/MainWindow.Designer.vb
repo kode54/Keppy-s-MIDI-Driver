@@ -44,6 +44,10 @@ Partial Class MainWindow
         Me.ImportSFPortB = New System.Windows.Forms.Button()
         Me.PortBBox = New System.Windows.Forms.ListBox()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.ManualBlackListLabel = New System.Windows.Forms.Label()
+        Me.ManualBlackList = New System.Windows.Forms.TextBox()
+        Me.Label12 = New System.Windows.Forms.Label()
         Me.BlackListAdvancedMode = New System.Windows.Forms.CheckBox()
         Me.RestoreDefaultBlackList = New System.Windows.Forms.Button()
         Me.RemoveBlackList = New System.Windows.Forms.Button()
@@ -304,6 +308,10 @@ Partial Class MainWindow
         '
         'TabPage4
         '
+        Me.TabPage4.Controls.Add(Me.Label13)
+        Me.TabPage4.Controls.Add(Me.ManualBlackListLabel)
+        Me.TabPage4.Controls.Add(Me.ManualBlackList)
+        Me.TabPage4.Controls.Add(Me.Label12)
         Me.TabPage4.Controls.Add(Me.BlackListAdvancedMode)
         Me.TabPage4.Controls.Add(Me.RestoreDefaultBlackList)
         Me.TabPage4.Controls.Add(Me.RemoveBlackList)
@@ -317,19 +325,57 @@ Partial Class MainWindow
         Me.TabPage4.Text = "Driver blacklist"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(301, 336)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(286, 13)
+        Me.Label13.TabIndex = 19
+        Me.Label13.Text = "Tip: Names are case sensitive, and spaces are recognized."
+        '
+        'ManualBlackListLabel
+        '
+        Me.ManualBlackListLabel.Enabled = False
+        Me.ManualBlackListLabel.Location = New System.Drawing.Point(271, 80)
+        Me.ManualBlackListLabel.Name = "ManualBlackListLabel"
+        Me.ManualBlackListLabel.Size = New System.Drawing.Size(215, 13)
+        Me.ManualBlackListLabel.TabIndex = 18
+        Me.ManualBlackListLabel.Text = "Name of the program (with .exe extension):"
+        Me.ManualBlackListLabel.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.ManualBlackListLabel.Visible = False
+        '
+        'ManualBlackList
+        '
+        Me.ManualBlackList.Enabled = False
+        Me.ManualBlackList.Location = New System.Drawing.Point(487, 77)
+        Me.ManualBlackList.Name = "ManualBlackList"
+        Me.ManualBlackList.Size = New System.Drawing.Size(100, 20)
+        Me.ManualBlackList.TabIndex = 17
+        Me.ManualBlackList.Visible = False
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(4, 62)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(239, 13)
+        Me.Label12.TabIndex = 16
+        Me.Label12.Text = "Select a program by clicking ''Add executable(s)''."
+        '
         'BlackListAdvancedMode
         '
         Me.BlackListAdvancedMode.AutoSize = True
-        Me.BlackListAdvancedMode.Location = New System.Drawing.Point(4, 57)
+        Me.BlackListAdvancedMode.Location = New System.Drawing.Point(6, 79)
         Me.BlackListAdvancedMode.Name = "BlackListAdvancedMode"
-        Me.BlackListAdvancedMode.Size = New System.Drawing.Size(222, 17)
+        Me.BlackListAdvancedMode.Size = New System.Drawing.Size(229, 17)
         Me.BlackListAdvancedMode.TabIndex = 15
-        Me.BlackListAdvancedMode.Text = "I want to add the program name by myself"
+        Me.BlackListAdvancedMode.Text = "I want to add the program's name by myself"
         Me.BlackListAdvancedMode.UseVisualStyleBackColor = True
         '
         'RestoreDefaultBlackList
         '
-        Me.RestoreDefaultBlackList.Location = New System.Drawing.Point(467, 49)
+        Me.RestoreDefaultBlackList.Location = New System.Drawing.Point(466, 51)
         Me.RestoreDefaultBlackList.Name = "RestoreDefaultBlackList"
         Me.RestoreDefaultBlackList.Size = New System.Drawing.Size(122, 23)
         Me.RestoreDefaultBlackList.TabIndex = 14
@@ -338,7 +384,7 @@ Partial Class MainWindow
         '
         'RemoveBlackList
         '
-        Me.RemoveBlackList.Location = New System.Drawing.Point(467, 26)
+        Me.RemoveBlackList.Location = New System.Drawing.Point(466, 27)
         Me.RemoveBlackList.Name = "RemoveBlackList"
         Me.RemoveBlackList.Size = New System.Drawing.Size(122, 23)
         Me.RemoveBlackList.TabIndex = 13
@@ -347,7 +393,7 @@ Partial Class MainWindow
         '
         'AddBlackList
         '
-        Me.AddBlackList.Location = New System.Drawing.Point(467, 3)
+        Me.AddBlackList.Location = New System.Drawing.Point(466, 3)
         Me.AddBlackList.Name = "AddBlackList"
         Me.AddBlackList.Size = New System.Drawing.Size(122, 23)
         Me.AddBlackList.TabIndex = 12
@@ -357,22 +403,26 @@ Partial Class MainWindow
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(1, 3)
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.ForeColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.Label10.Location = New System.Drawing.Point(4, 6)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(385, 52)
+        Me.Label10.Size = New System.Drawing.Size(441, 52)
         Me.Label10.TabIndex = 11
         Me.Label10.Text = resources.GetString("Label10.Text")
         '
         'ProgramsBlackList
         '
-        Me.ProgramsBlackList.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ProgramsBlackList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.ProgramsBlackList.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ProgramsBlackList.FormattingEnabled = True
         Me.ProgramsBlackList.HorizontalScrollbar = True
-        Me.ProgramsBlackList.ItemHeight = 14
-        Me.ProgramsBlackList.Location = New System.Drawing.Point(3, 76)
+        Me.ProgramsBlackList.ItemHeight = 15
+        Me.ProgramsBlackList.Location = New System.Drawing.Point(3, 100)
+        Me.ProgramsBlackList.Margin = New System.Windows.Forms.Padding(0)
         Me.ProgramsBlackList.Name = "ProgramsBlackList"
         Me.ProgramsBlackList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ProgramsBlackList.Size = New System.Drawing.Size(585, 270)
+        Me.ProgramsBlackList.Size = New System.Drawing.Size(585, 227)
         Me.ProgramsBlackList.TabIndex = 10
         '
         'TabPage3
@@ -396,10 +446,10 @@ Partial Class MainWindow
         Me.LinkLabel1.AutoSize = True
         Me.LinkLabel1.Location = New System.Drawing.Point(13, 332)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(236, 13)
+        Me.LinkLabel1.Size = New System.Drawing.Size(225, 13)
         Me.LinkLabel1.TabIndex = 7
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Why is software rendering forced to be enabled?"
+        Me.LinkLabel1.Text = "Why is software rendering enabled by default?"
         '
         'GroupBox1
         '
@@ -928,5 +978,9 @@ Partial Class MainWindow
     Friend WithEvents BlackListFileDialog As System.Windows.Forms.OpenFileDialog
     Friend WithEvents RestoreDefaultBlackList As System.Windows.Forms.Button
     Friend WithEvents BlackListAdvancedMode As System.Windows.Forms.CheckBox
+    Friend WithEvents Label12 As System.Windows.Forms.Label
+    Friend WithEvents ManualBlackListLabel As System.Windows.Forms.Label
+    Friend WithEvents ManualBlackList As System.Windows.Forms.TextBox
+    Friend WithEvents Label13 As System.Windows.Forms.Label
 
 End Class
