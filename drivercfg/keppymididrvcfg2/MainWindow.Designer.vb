@@ -883,7 +883,7 @@ Partial Class MainWindow
         Me.MaximizeBox = False
         Me.Name = "MainWindow"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Keppy's MIDI Driver (Configurator) - VERHERE "
+        Me.Text = "Keppy's MIDI Driver (Configurator)"
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage1.PerformLayout()

@@ -33,7 +33,6 @@ Public Class MainWindow
         Else
             Not64Bit = "SOFTWARE\Keppy's MIDI Driver"
         End If
-        Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 213"
 
         Try 'Checks if the list for Port A exists
             Dim PortASFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist")

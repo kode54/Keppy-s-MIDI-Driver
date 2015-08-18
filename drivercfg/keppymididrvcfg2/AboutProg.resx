@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="RichTextBox1.Text" xml:space="preserve">
-    <value>Keppy's MIDI Driver (Version 1.5, Bugfix 213)
+    <value>Keppy's MIDI Driver (Version 1.5, Bugfix 215)
 Original version by Kode54, libraries by un4seen.
 
-Compiled in: August 17, 2015 (20:31:17 AM, GMT +1)
+Compiled in: August 18, 2015 (10:19:51 PM, GMT +1)
 Target OS: Microsoft Windows 10 Pro (Service Release 1, 64-bit)
 Compiler used: Microsoft Visual Studio 2013 (Update 2)
 
