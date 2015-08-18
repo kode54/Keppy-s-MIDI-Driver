@@ -42,19 +42,19 @@ Public Class MainWindow
             Loop
             reader.Close()
         Catch ex As Exception
-            MsgBox("The file " & Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist" & " can not be found, press OK to continue. (It'll be automatically created in a second)", 64, "Information")
+            Console.WriteLine("The soundfont list for Port A doesn't exist. I'll create it.")
             File.Create(Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist").Dispose()
         End Try
         
         Try 'Does the same for Port B
-            Dim PortBSFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist")
+            Dim PortBSFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist")
             Dim reader2 As StreamReader = New StreamReader(New FileStream(PortBSFList, FileMode.Open))
             Do While Not reader2.EndOfStream
                 PortBBox.Items.Add(reader2.ReadLine())
             Loop
             reader2.Close()
         Catch ex As Exception
-            MsgBox("The file " & Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist" & " can not be found, press OK to continue. (It'll be automatically created in a second)", 64, "Information")
+            Console.WriteLine("The soundfont list for Port B doesn't exist. I'll create it.")
             File.Create(Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist").Dispose()
         End Try
 
@@ -67,6 +67,7 @@ Public Class MainWindow
             reader3.Close()
         Catch ex As Exception
             Try
+                Console.WriteLine("The blacklist doesn't exist. Reading blacklist database from GitHub...")
                 ProgramsBlackList.Items.Clear()
                 Dim address As String = "https://raw.githubusercontent.com/KaleidonKep99/Keppy-s-MIDI-Driver/master/output/keppymididrv.defaultblacklist"
                 Dim client As WebClient = New WebClient()
@@ -87,6 +88,7 @@ Public Class MainWindow
                     Next
                 End Using
             Catch exc As Exception
+                Console.WriteLine("Can not read the online blacklist database. Retrying with the local one...")
                 ProgramsBlackList.Items.Clear()
                 Dim lines() As String = IO.File.ReadAllLines(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist")
                 ProgramsBlackList.Items.AddRange(lines)
