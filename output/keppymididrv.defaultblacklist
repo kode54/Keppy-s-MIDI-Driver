@@ -6,6 +6,7 @@ lsass.exe
 explorer.exe
 taskhost.exe
 taskhostw.exe
+taskhostex.exe
 sihost.exe
 spoolsv.exe
 WUDFHost.exe
@@ -13,6 +14,7 @@ CCC.exe
 vmware-hostd.exe
 vmware.exe
 vmplayer.exe
+puush.exe
 tv_w32.exe
 tv_w64.exe
 TeamViewer.exe
