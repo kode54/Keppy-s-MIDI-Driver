@@ -5,11 +5,12 @@ Imports Microsoft.Win32
 
 Public Class MainWindow
 
-    Public Declare Function GetAsyncKeyState Lib "user32.dll" (ByVal vKey As Int32) As UShort
+    Public Declare Function GetAsyncKeyState Lib "user32.dll" (ByVal vKey As Int32) As UShort 'Used for the ENTER button, to manually add names to the blacklist
 
     Public Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Try
-            Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create("http://kaleidonkep99.altervista.org/downloads/keppydriverupdate.txt")
+
+        Try 'Checks if there are updates for the driver
+            Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create("https://raw.githubusercontent.com/KaleidonKep99/Keppy-s-MIDI-Driver/master/output/keppydriverupdate.txt")
             Dim response As System.Net.HttpWebResponse = request.GetResponse()
             Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
             Dim newestversion As String = sr.ReadToEnd()
@@ -33,62 +34,78 @@ Public Class MainWindow
             Not64Bit = "SOFTWARE\Keppy's MIDI Driver"
         End If
         Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 213"
-        Try
 
-        Catch ex As Exception
-
-        End Try
-        Dim PortASFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist")
-        If File.Exists(PortASFList) Then
+        Try 'Checks if the list for Port A exists
+            Dim PortASFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist")
             Dim reader As StreamReader = New StreamReader(New FileStream(PortASFList, FileMode.Open))
             Do While Not reader.EndOfStream
                 PortABox.Items.Add(reader.ReadLine())
             Loop
             reader.Close()
-        Else
-            MsgBox("The file " & Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist" & " can't be found, press OK to continue. (It'll be automatically created in a second)", 64, "Information")
+        Catch ex As Exception
+            MsgBox("The file " & Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist" & " can not be found, press OK to continue. (It'll be automatically created in a second)", 64, "Information")
             File.Create(Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist").Dispose()
-        End If
-
-        Dim PortBSFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist")
-        If File.Exists(PortBSFList) Then
-            Dim reader2 As StreamReader = New StreamReader(New FileStream(Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist", FileMode.Open))
+        End Try
+        
+        Try 'Does the same for Port B
+            Dim PortBSFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist")
+            Dim reader2 As StreamReader = New StreamReader(New FileStream(PortBSFList, FileMode.Open))
             Do While Not reader2.EndOfStream
                 PortBBox.Items.Add(reader2.ReadLine())
             Loop
             reader2.Close()
-        Else
-            MsgBox("The file " & Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist" & " can't be found, press OK to continue. (It'll be automatically created in a second)", 64, "Information")
+        Catch ex As Exception
+            MsgBox("The file " & Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist" & " can not be found, press OK to continue. (It'll be automatically created in a second)", 64, "Information")
             File.Create(Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist").Dispose()
-        End If
+        End Try
 
-        Dim BlackList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist")
-        If File.Exists(BlackList) Then
+        Try 'Again, the same as for both Port A and Port B, but for the blacklist system
+            Dim BlackList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist")
             Dim reader3 As StreamReader = New StreamReader(New FileStream(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist", FileMode.Open))
             Do While Not reader3.EndOfStream
                 ProgramsBlackList.Items.Add(reader3.ReadLine())
             Loop
             reader3.Close()
-        Else
-            File.Create(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist").Dispose()
-            ProgramsBlackList.Items.Clear()
-            Dim lines() As String = IO.File.ReadAllLines(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist")
-            ProgramsBlackList.Items.AddRange(lines)
+        Catch ex As Exception
+            Try
+                ProgramsBlackList.Items.Clear()
+                Dim address As String = "https://raw.githubusercontent.com/KaleidonKep99/Keppy-s-MIDI-Driver/master/output/keppymididrv.defaultblacklist"
+                Dim client As WebClient = New WebClient()
+                Dim reader As StreamReader = New StreamReader(client.OpenRead(address))
+                Do While Not reader.EndOfStream
+                    ProgramsBlackList.Items.Add(reader.ReadLine())
+                Loop
+                reader.Close()
 
-            Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
-            Dim Filenum As Integer = FreeFile()
-            FileOpen(Filenum, BlackListText, OpenMode.Output)
-            FileClose()
+                Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
+                Dim Filenum As Integer = FreeFile()
+                FileOpen(Filenum, BlackListText, OpenMode.Output)
+                FileClose()
 
-            Using SW As New IO.StreamWriter(BlackListText, True)
-                For Each itm As String In Me.ProgramsBlackList.Items
-                    SW.WriteLine(itm)
-                Next
-            End Using
+                Using SW As New IO.StreamWriter(BlackListText, True)
+                    For Each itm As String In Me.ProgramsBlackList.Items
+                        SW.WriteLine(itm)
+                    Next
+                End Using
+            Catch exc As Exception
+                ProgramsBlackList.Items.Clear()
+                Dim lines() As String = IO.File.ReadAllLines(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist")
+                ProgramsBlackList.Items.AddRange(lines)
 
-        End If
+                Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
+                Dim Filenum As Integer = FreeFile()
+                FileOpen(Filenum, BlackListText, OpenMode.Output)
+                FileClose()
 
-        Dim osVer As Version = Environment.OSVersion.Version
+                Using SW As New IO.StreamWriter(BlackListText, True)
+                    For Each itm As String In Me.ProgramsBlackList.Items
+                        SW.WriteLine(itm)
+                    Next
+                End Using
+            End Try
+        End Try
+
+        Dim osVer As Version = Environment.OSVersion.Version 'Fancy stuff to see what O.S. you're using
         If osVer.Major = 10 Then
             Versionlabel.Text = "Your current O.S. is: Windows 10 or Windows Server 2016"
         ElseIf osVer.Major = 6 And osVer.Minor = 3 Then
@@ -99,11 +116,17 @@ Public Class MainWindow
             Versionlabel.Text = "Your current O.S. is: Windows 7 or Windows Server 2008 R2"
         ElseIf osVer.Major = 6 And osVer.Minor = 0 Then
             Versionlabel.Text = "Your current O.S. is: Windows Vista or Windows Server 2008"
+        ElseIf osVer.Major = 5 And osVer.Minor = 2 Then
+            Versionlabel.Text = "Your current O.S. is: Windows XP (64-bit) or Windows Server 2003"
         ElseIf osVer.Major = 5 And osVer.Minor = 1 Then
-            Versionlabel.Text = "Your current O.S. is: Windows XP"
+            Versionlabel.Text = "Your current O.S. is: Windows XP (32-bit)"
+        ElseIf osVer.Major = 5 And osVer.Minor = 0 Then
+            Versionlabel.Text = "Your current O.S. is: Windows 2000 (Really strange...)"
+        ElseIf osVer.Major = 4 Then
+            Versionlabel.Text = "Your current O.S. is: Wine, I guess?"
         End If
 
-        If My.Computer.Registry.LocalMachine.OpenSubKey(Not64Bit, True) Is Nothing Then
+        If My.Computer.Registry.LocalMachine.OpenSubKey(Not64Bit, True) Is Nothing Then 'Reads values from the registry
             My.Computer.Registry.LocalMachine.CreateSubKey("SOFTWARE\Wow6432Node\Keppy's MIDI Driver\")
             Dim keppykey = My.Computer.Registry.LocalMachine.OpenSubKey(Not64Bit, True)
             keppykey.SetValue("buflen", "10", RegistryValueKind.DWord)
@@ -485,7 +508,7 @@ Public Class MainWindow
 
     Private Sub UpdateDownload_Click(sender As Object, e As EventArgs) Handles UpdateDownload.Click
         Try
-            Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create("http://kaleidonkep99.altervista.org/downloads/keppydriverupdate.txt")
+            Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create("https://raw.githubusercontent.com/KaleidonKep99/Keppy-s-MIDI-Driver/master/output/keppydriverupdate.txt")
             Dim response As System.Net.HttpWebResponse = request.GetResponse()
             Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
             Dim newestversion As String = sr.ReadToEnd()
@@ -598,11 +621,7 @@ Public Class MainWindow
                 ProgramsBlackList.Items.Add(reader.ReadLine())
             Loop
             reader.Close()
-            MsgBox("The list has been restored with the default values stored in:" & vbCrLf & "https://raw.githubusercontent.com/KaleidonKep99/Keppy-s-MIDI-Driver/master/output/keppymididrv.defaultblacklist", 64, "Success")
-        Catch exc As Exception
-            ProgramsBlackList.Items.Clear()
-            Dim lines() As String = IO.File.ReadAllLines(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist")
-            ProgramsBlackList.Items.AddRange(lines)
+
             Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
             Dim Filenum As Integer = FreeFile()
             FileOpen(Filenum, BlackListText, OpenMode.Output)
@@ -614,7 +633,24 @@ Public Class MainWindow
                 Next
             End Using
 
-            MsgBox("Can not read the online blacklist." & vbCrLf & vbCrLf & "The list has been restored with the default values stored in:" & vbCrLf & Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist", 64, "Success")
+            MsgBox("The list has been restored with the default values stored in the online blacklist database.", 64, "Success")
+        Catch exc As Exception
+            ProgramsBlackList.Items.Clear()
+            Dim lines() As String = IO.File.ReadAllLines(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist")
+            ProgramsBlackList.Items.AddRange(lines)
+
+            Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
+            Dim Filenum As Integer = FreeFile()
+            FileOpen(Filenum, BlackListText, OpenMode.Output)
+            FileClose()
+
+            Using SW As New IO.StreamWriter(BlackListText, True)
+                For Each itm As String In Me.ProgramsBlackList.Items
+                    SW.WriteLine(itm)
+                Next
+            End Using
+
+            MsgBox("The online blacklist database seems to be offline." & vbCrLf & vbCrLf & "The list has been restored with the default values stored in:" & vbCrLf & Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist", 64, "Success")
         End Try
     End Sub
 

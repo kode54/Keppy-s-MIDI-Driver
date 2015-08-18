@@ -121,7 +121,7 @@
     <value>WARNING: Do NOT remove the names that are already in the list by default,
 since they're used to ban system processes/random programs from locking
 the driver, during the uninstallation process.
-(winlogon.exe always locks the driver, under Windows XP)</value>
+(Ex. winlogon.exe always locks the driver, under Windows XP)</value>
   </data>
   <metadata name="Information.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>312, 17</value>
@@ -131,9 +131,6 @@ the driver, during the uninstallation process.
   </metadata>
   <metadata name="PortBOpenDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>159, 17</value>
-  </metadata>
-  <metadata name="Information.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>312, 17</value>
   </metadata>
   <metadata name="BlackListFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>428, 17</value>

@@ -11,10 +11,17 @@ sihost.exe
 spoolsv.exe
 WUDFHost.exe
 CCC.exe
+RAVBg64.exe
+RAVCpl64.exe
+SndVol.exe
+SndVol32.exe
+SndRec.exe
+SndRec32.exe
 vmware-hostd.exe
 vmware.exe
 vmplayer.exe
 puush.exe
+GamePanel.exe
 tv_w32.exe
 tv_w64.exe
 TeamViewer.exe
