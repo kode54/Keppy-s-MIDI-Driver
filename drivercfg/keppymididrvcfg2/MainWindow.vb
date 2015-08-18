@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Drawing
+Imports System.Net
 Imports Microsoft.Win32
 
 Public Class MainWindow
@@ -7,20 +8,24 @@ Public Class MainWindow
     Public Declare Function GetAsyncKeyState Lib "user32.dll" (ByVal vKey As Int32) As UShort
 
     Public Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create("http://kaleidonkep99.altervista.org/downloads/keppydriverupdate.txt")
-        Dim response As System.Net.HttpWebResponse = request.GetResponse()
-        Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
-        Dim newestversion As String = sr.ReadToEnd()
-        Dim currentversion As String = Application.ProductVersion
-        ThisVersionDriver.Text = "The current version of the driver, installed on your system, is: " + currentversion.ToString
-        LatestVersionDriver.Text = "The latest version online, in the GitHub repository, is: " + newestversion.ToString
-        If currentversion >= newestversion Then
-            UpdateDownload.Enabled = False
-            UpdateDownload.Text = "Already updated"
-        Else
-            UpdateDownload.Enabled = True
-            UpdateDownload.Text = "Download update"
-        End If
+        Try
+            Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create("http://kaleidonkep99.altervista.org/downloads/keppydriverupdate.txt")
+            Dim response As System.Net.HttpWebResponse = request.GetResponse()
+            Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
+            Dim newestversion As String = sr.ReadToEnd()
+            Dim currentversion As String = Application.ProductVersion
+            ThisVersionDriver.Text = "The current version of the driver, installed on your system, is: " + currentversion.ToString
+            LatestVersionDriver.Text = "The latest version online, in the GitHub repository, is: " + newestversion.ToString
+            If newestversion > currentversion Then
+                UpdateDownload.Text = "Download update"
+            Else
+
+            End If
+        Catch ex As Exception
+            Dim currentversion As String = Application.ProductVersion
+            ThisVersionDriver.Text = "The current version of the driver, installed on your system, is: " + currentversion.ToString
+            LatestVersionDriver.Text = "Can not check for updates. You're offline, or maybe the website is temporarily down."
+        End Try
         Dim Not64Bit As String
         If Environment.Is64BitOperatingSystem Then
             Not64Bit = "SOFTWARE\Wow6432Node\Keppy's MIDI Driver"
@@ -28,6 +33,11 @@ Public Class MainWindow
             Not64Bit = "SOFTWARE\Keppy's MIDI Driver"
         End If
         Me.Text = "Keppy's MIDI Driver (Configurator) - Version 1.5, Bugfix 213"
+        Try
+
+        Catch ex As Exception
+
+        End Try
         Dim PortASFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist")
         If File.Exists(PortASFList) Then
             Dim reader As StreamReader = New StreamReader(New FileStream(PortASFList, FileMode.Open))
@@ -474,7 +484,26 @@ Public Class MainWindow
     End Sub
 
     Private Sub UpdateDownload_Click(sender As Object, e As EventArgs) Handles UpdateDownload.Click
-        Process.Start("http://goo.gl/BHgazb")
+        Try
+            Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create("http://kaleidonkep99.altervista.org/downloads/keppydriverupdate.txt")
+            Dim response As System.Net.HttpWebResponse = request.GetResponse()
+            Dim sr As System.IO.StreamReader = New System.IO.StreamReader(response.GetResponseStream())
+            Dim newestversion As String = sr.ReadToEnd()
+            Dim currentversion As String = Application.ProductVersion
+            ThisVersionDriver.Text = "The current version of the driver, installed on your system, is: " + currentversion.ToString
+            LatestVersionDriver.Text = "The latest version online, in the GitHub repository, is: " + newestversion.ToString
+            If newestversion > currentversion Then
+                MsgBox("New update found, press OK to open the release page.", 48, "New update found!")
+                Process.Start("http://goo.gl/BHgazb")
+            Else
+                MsgBox("This release is already updated.", 64, "No updates found.")
+            End If
+        Catch ex As Exception
+            Dim currentversion As String = Application.ProductVersion
+            ThisVersionDriver.Text = "The current version of the driver, installed on your system, is: " + currentversion.ToString
+            LatestVersionDriver.Text = "Can not check for updates. You're offline, or maybe the website is temporarily down."
+        End Try
+
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
@@ -560,21 +589,33 @@ Public Class MainWindow
     End Sub
 
     Private Sub RestoreDefaultBlackList_Click(sender As Object, e As EventArgs) Handles RestoreDefaultBlackList.Click
-        ProgramsBlackList.Items.Clear()
-        Dim lines() As String = IO.File.ReadAllLines(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist")
-        ProgramsBlackList.Items.AddRange(lines)
-        Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
-        Dim Filenum As Integer = FreeFile()
-        FileOpen(Filenum, BlackListText, OpenMode.Output)
-        FileClose()
+        Try
+            ProgramsBlackList.Items.Clear()
+            Dim address As String = "https://raw.githubusercontent.com/KaleidonKep99/Keppy-s-MIDI-Driver/master/output/keppymididrv.defaultblacklist"
+            Dim client As WebClient = New WebClient()
+            Dim reader As StreamReader = New StreamReader(client.OpenRead(address))
+            Do While Not reader.EndOfStream
+                ProgramsBlackList.Items.Add(reader.ReadLine())
+            Loop
+            reader.Close()
+            MsgBox("The list has been restored with the default values stored in:" & vbCrLf & "https://raw.githubusercontent.com/KaleidonKep99/Keppy-s-MIDI-Driver/master/output/keppymididrv.defaultblacklist", 64, "Success")
+        Catch exc As Exception
+            ProgramsBlackList.Items.Clear()
+            Dim lines() As String = IO.File.ReadAllLines(Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist")
+            ProgramsBlackList.Items.AddRange(lines)
+            Dim BlackListText As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.blacklist"
+            Dim Filenum As Integer = FreeFile()
+            FileOpen(Filenum, BlackListText, OpenMode.Output)
+            FileClose()
 
-        Using SW As New IO.StreamWriter(BlackListText, True)
-            For Each itm As String In Me.ProgramsBlackList.Items
-                SW.WriteLine(itm)
-            Next
-        End Using
+            Using SW As New IO.StreamWriter(BlackListText, True)
+                For Each itm As String In Me.ProgramsBlackList.Items
+                    SW.WriteLine(itm)
+                Next
+            End Using
 
-        MsgBox("The list has been restored with the default values!", 64, "Success")
+            MsgBox("Can not read the online blacklist." & vbCrLf & vbCrLf & "The list has been restored with the default values stored in:" & vbCrLf & Environment.GetEnvironmentVariable("WINDIR") + "\keppymididrv.defaultblacklist", 64, "Success")
+        End Try
     End Sub
 
     Private Sub BlackListAdvancedMode_CheckedChanged(sender As Object, e As EventArgs) Handles BlackListAdvancedMode.CheckedChanged

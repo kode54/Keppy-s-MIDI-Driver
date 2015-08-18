@@ -527,7 +527,7 @@ Partial Class MainWindow
         '
         Me.Versionlabel.Location = New System.Drawing.Point(85, 56)
         Me.Versionlabel.Name = "Versionlabel"
-        Me.Versionlabel.Size = New System.Drawing.Size(381, 15)
+        Me.Versionlabel.Size = New System.Drawing.Size(374, 15)
         Me.Versionlabel.TabIndex = 6
         Me.Versionlabel.Text = "Your current O.S. is: Not Linux For Sure"
         Me.Versionlabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -552,11 +552,11 @@ Partial Class MainWindow
         '
         'UpdateDownload
         '
-        Me.UpdateDownload.Location = New System.Drawing.Point(472, 52)
+        Me.UpdateDownload.Location = New System.Drawing.Point(465, 52)
         Me.UpdateDownload.Name = "UpdateDownload"
-        Me.UpdateDownload.Size = New System.Drawing.Size(99, 23)
+        Me.UpdateDownload.Size = New System.Drawing.Size(106, 23)
         Me.UpdateDownload.TabIndex = 1
-        Me.UpdateDownload.Text = "AAAAA!"
+        Me.UpdateDownload.Text = "Check for updates"
         Me.UpdateDownload.UseVisualStyleBackColor = True
         '
         'ThisVersionDriver
