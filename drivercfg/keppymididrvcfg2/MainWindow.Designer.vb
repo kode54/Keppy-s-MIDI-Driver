@@ -24,8 +24,9 @@ Partial Class MainWindow
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainWindow))
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.Tabs = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.DisableCheckPortA = New System.Windows.Forms.CheckBox()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ApplyPortA = New System.Windows.Forms.Button()
@@ -36,8 +37,9 @@ Partial Class MainWindow
         Me.ImportSFPortA = New System.Windows.Forms.Button()
         Me.PortABox = New System.Windows.Forms.ListBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.Label15 = New System.Windows.Forms.Label()
+        Me.DisableCheckPortB = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.ApplyPortB = New System.Windows.Forms.Button()
         Me.ClearPortB = New System.Windows.Forms.Button()
         Me.MoveDownPortB = New System.Windows.Forms.Button()
@@ -45,7 +47,7 @@ Partial Class MainWindow
         Me.RemoveSFPortB = New System.Windows.Forms.Button()
         Me.ImportSFPortB = New System.Windows.Forms.Button()
         Me.PortBBox = New System.Windows.Forms.ListBox()
-        Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.ManualBlackListLabel = New System.Windows.Forms.Label()
         Me.ManualBlackList = New System.Windows.Forms.TextBox()
@@ -56,13 +58,13 @@ Partial Class MainWindow
         Me.AddBlackList = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.ProgramsBlackList = New System.Windows.Forms.ListBox()
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.TabPage4 = New System.Windows.Forms.TabPage()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.SoftwareRendering = New System.Windows.Forms.CheckBox()
         Me.FloatingDisabled = New System.Windows.Forms.CheckBox()
-        Me.CurrentVolumeHUE = New System.Windows.Forms.Label()
         Me.VolumeBar = New System.Windows.Forms.TrackBar()
+        Me.CurrentVolumeHUE = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Versionlabel = New System.Windows.Forms.Label()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -99,11 +101,14 @@ Partial Class MainWindow
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Information = New System.Windows.Forms.ToolTip(Me.components)
         Me.BlackListFileDialog = New System.Windows.Forms.OpenFileDialog()
-        Me.TabControl1.SuspendLayout()
+        Me.FancyClockTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.FancyClock = New System.Windows.Forms.Label()
+        Me.Tabs.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
-        Me.TabPage4.SuspendLayout()
         Me.TabPage3.SuspendLayout()
+        Me.TabPage4.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.VolumeBar, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox3.SuspendLayout()
@@ -113,23 +118,26 @@ Partial Class MainWindow
         CType(Me.TracksLimit, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.bufsize, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PolyphonyLimit, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabPage5.SuspendLayout()
         Me.SuspendLayout()
         '
-        'TabControl1
+        'Tabs
         '
-        Me.TabControl1.Controls.Add(Me.TabPage1)
-        Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.Controls.Add(Me.TabPage4)
-        Me.TabControl1.Controls.Add(Me.TabPage3)
-        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(599, 382)
-        Me.TabControl1.TabIndex = 0
+        Me.Tabs.Controls.Add(Me.TabPage1)
+        Me.Tabs.Controls.Add(Me.TabPage2)
+        Me.Tabs.Controls.Add(Me.TabPage3)
+        Me.Tabs.Controls.Add(Me.TabPage4)
+        Me.Tabs.Controls.Add(Me.TabPage5)
+        Me.Tabs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Tabs.Location = New System.Drawing.Point(0, 0)
+        Me.Tabs.Name = "Tabs"
+        Me.Tabs.SelectedIndex = 0
+        Me.Tabs.Size = New System.Drawing.Size(599, 382)
+        Me.Tabs.TabIndex = 0
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.DisableCheckPortA)
         Me.TabPage1.Controls.Add(Me.Label14)
         Me.TabPage1.Controls.Add(Me.Label1)
         Me.TabPage1.Controls.Add(Me.ApplyPortA)
@@ -147,6 +155,16 @@ Partial Class MainWindow
         Me.TabPage1.Text = "Soundfont in Port A"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
+        'DisableCheckPortA
+        '
+        Me.DisableCheckPortA.AutoSize = True
+        Me.DisableCheckPortA.Location = New System.Drawing.Point(7, 336)
+        Me.DisableCheckPortA.Name = "DisableCheckPortA"
+        Me.DisableCheckPortA.Size = New System.Drawing.Size(158, 17)
+        Me.DisableCheckPortA.TabIndex = 10
+        Me.DisableCheckPortA.Text = "Disable file extension check"
+        Me.DisableCheckPortA.UseVisualStyleBackColor = True
+        '
         'Label14
         '
         Me.Label14.Location = New System.Drawing.Point(509, 148)
@@ -159,7 +177,7 @@ Partial Class MainWindow
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(7, 337)
+        Me.Label1.Location = New System.Drawing.Point(340, 337)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(243, 13)
         Me.Label1.TabIndex = 8
@@ -230,8 +248,9 @@ Partial Class MainWindow
         '
         'TabPage2
         '
-        Me.TabPage2.Controls.Add(Me.Label15)
+        Me.TabPage2.Controls.Add(Me.DisableCheckPortB)
         Me.TabPage2.Controls.Add(Me.Label2)
+        Me.TabPage2.Controls.Add(Me.Label15)
         Me.TabPage2.Controls.Add(Me.ApplyPortB)
         Me.TabPage2.Controls.Add(Me.ClearPortB)
         Me.TabPage2.Controls.Add(Me.MoveDownPortB)
@@ -247,6 +266,25 @@ Partial Class MainWindow
         Me.TabPage2.Text = "Soundfont in Port B"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
+        'DisableCheckPortB
+        '
+        Me.DisableCheckPortB.AutoSize = True
+        Me.DisableCheckPortB.Location = New System.Drawing.Point(7, 336)
+        Me.DisableCheckPortB.Name = "DisableCheckPortB"
+        Me.DisableCheckPortB.Size = New System.Drawing.Size(158, 17)
+        Me.DisableCheckPortB.TabIndex = 19
+        Me.DisableCheckPortB.Text = "Disable file extension check"
+        Me.DisableCheckPortB.UseVisualStyleBackColor = True
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(340, 337)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(243, 13)
+        Me.Label2.TabIndex = 18
+        Me.Label2.Text = "The last soundfont will override the previous ones."
+        '
         'Label15
         '
         Me.Label15.Location = New System.Drawing.Point(509, 148)
@@ -255,15 +293,6 @@ Partial Class MainWindow
         Me.Label15.TabIndex = 17
         Me.Label15.Text = "On SFZ files:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "px,y=0,0|" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "x = Bank" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "y = Preset"
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(7, 337)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(243, 13)
-        Me.Label2.TabIndex = 16
-        Me.Label2.Text = "The last soundfont will override the previous ones."
         '
         'ApplyPortB
         '
@@ -328,24 +357,24 @@ Partial Class MainWindow
         Me.PortBBox.Size = New System.Drawing.Size(502, 329)
         Me.PortBBox.TabIndex = 9
         '
-        'TabPage4
+        'TabPage3
         '
-        Me.TabPage4.Controls.Add(Me.Label13)
-        Me.TabPage4.Controls.Add(Me.ManualBlackListLabel)
-        Me.TabPage4.Controls.Add(Me.ManualBlackList)
-        Me.TabPage4.Controls.Add(Me.Label12)
-        Me.TabPage4.Controls.Add(Me.BlackListAdvancedMode)
-        Me.TabPage4.Controls.Add(Me.RestoreDefaultBlackList)
-        Me.TabPage4.Controls.Add(Me.RemoveBlackList)
-        Me.TabPage4.Controls.Add(Me.AddBlackList)
-        Me.TabPage4.Controls.Add(Me.Label10)
-        Me.TabPage4.Controls.Add(Me.ProgramsBlackList)
-        Me.TabPage4.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.Size = New System.Drawing.Size(591, 356)
-        Me.TabPage4.TabIndex = 3
-        Me.TabPage4.Text = "Driver blacklist"
-        Me.TabPage4.UseVisualStyleBackColor = True
+        Me.TabPage3.Controls.Add(Me.Label13)
+        Me.TabPage3.Controls.Add(Me.ManualBlackListLabel)
+        Me.TabPage3.Controls.Add(Me.ManualBlackList)
+        Me.TabPage3.Controls.Add(Me.Label12)
+        Me.TabPage3.Controls.Add(Me.BlackListAdvancedMode)
+        Me.TabPage3.Controls.Add(Me.RestoreDefaultBlackList)
+        Me.TabPage3.Controls.Add(Me.RemoveBlackList)
+        Me.TabPage3.Controls.Add(Me.AddBlackList)
+        Me.TabPage3.Controls.Add(Me.Label10)
+        Me.TabPage3.Controls.Add(Me.ProgramsBlackList)
+        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage3.Name = "TabPage3"
+        Me.TabPage3.Size = New System.Drawing.Size(591, 356)
+        Me.TabPage3.TabIndex = 3
+        Me.TabPage3.Text = "Driver blacklist"
+        Me.TabPage3.UseVisualStyleBackColor = True
         '
         'Label13
         '
@@ -447,21 +476,21 @@ Partial Class MainWindow
         Me.ProgramsBlackList.Size = New System.Drawing.Size(585, 227)
         Me.ProgramsBlackList.TabIndex = 10
         '
-        'TabPage3
+        'TabPage4
         '
-        Me.TabPage3.Controls.Add(Me.LinkLabel1)
-        Me.TabPage3.Controls.Add(Me.GroupBox1)
-        Me.TabPage3.Controls.Add(Me.GroupBox3)
-        Me.TabPage3.Controls.Add(Me.AdvancedReset)
-        Me.TabPage3.Controls.Add(Me.AdvancedApply)
-        Me.TabPage3.Controls.Add(Me.GroupBox2)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(591, 356)
-        Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Settings/Update"
-        Me.TabPage3.UseVisualStyleBackColor = True
+        Me.TabPage4.Controls.Add(Me.LinkLabel1)
+        Me.TabPage4.Controls.Add(Me.GroupBox1)
+        Me.TabPage4.Controls.Add(Me.GroupBox3)
+        Me.TabPage4.Controls.Add(Me.AdvancedReset)
+        Me.TabPage4.Controls.Add(Me.AdvancedApply)
+        Me.TabPage4.Controls.Add(Me.GroupBox2)
+        Me.TabPage4.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage4.Name = "TabPage4"
+        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage4.Size = New System.Drawing.Size(591, 356)
+        Me.TabPage4.TabIndex = 2
+        Me.TabPage4.Text = "Settings/Update"
+        Me.TabPage4.UseVisualStyleBackColor = True
         '
         'LinkLabel1
         '
@@ -509,18 +538,6 @@ Partial Class MainWindow
         "r old PCs)")
         Me.FloatingDisabled.UseVisualStyleBackColor = True
         '
-        'CurrentVolumeHUE
-        '
-        Me.CurrentVolumeHUE.Font = New System.Drawing.Font("KEPPYDIGITAL", 44.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CurrentVolumeHUE.Location = New System.Drawing.Point(336, 9)
-        Me.CurrentVolumeHUE.Name = "CurrentVolumeHUE"
-        Me.CurrentVolumeHUE.Size = New System.Drawing.Size(236, 60)
-        Me.CurrentVolumeHUE.TabIndex = 1
-        Me.CurrentVolumeHUE.Text = "100"
-        Me.CurrentVolumeHUE.TextAlign = System.Drawing.ContentAlignment.TopRight
-        Me.CurrentVolumeHUE.UseCompatibleTextRendering = True
-        Me.CurrentVolumeHUE.UseMnemonic = False
-        '
         'VolumeBar
         '
         Me.VolumeBar.AutoSize = False
@@ -532,6 +549,18 @@ Partial Class MainWindow
         Me.VolumeBar.TabIndex = 0
         Me.VolumeBar.TickFrequency = 100
         Me.VolumeBar.TickStyle = System.Windows.Forms.TickStyle.Both
+        '
+        'CurrentVolumeHUE
+        '
+        Me.CurrentVolumeHUE.Font = New System.Drawing.Font("KEPPYDIGITAL", 44.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CurrentVolumeHUE.Location = New System.Drawing.Point(336, 9)
+        Me.CurrentVolumeHUE.Name = "CurrentVolumeHUE"
+        Me.CurrentVolumeHUE.Size = New System.Drawing.Size(236, 60)
+        Me.CurrentVolumeHUE.TabIndex = 1
+        Me.CurrentVolumeHUE.Text = "100"
+        Me.CurrentVolumeHUE.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.CurrentVolumeHUE.UseCompatibleTextRendering = True
+        Me.CurrentVolumeHUE.UseMnemonic = False
         '
         'GroupBox3
         '
@@ -894,28 +923,53 @@ Partial Class MainWindow
         Me.BlackListFileDialog.FileName = "Add an executable..."
         Me.BlackListFileDialog.Multiselect = True
         '
+        'FancyClockTimer
+        '
+        Me.FancyClockTimer.Interval = 1000
+        '
+        'TabPage5
+        '
+        Me.TabPage5.Controls.Add(Me.FancyClock)
+        Me.TabPage5.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage5.Name = "TabPage5"
+        Me.TabPage5.Size = New System.Drawing.Size(591, 356)
+        Me.TabPage5.TabIndex = 4
+        Me.TabPage5.Text = "Secret tab of doom"
+        Me.TabPage5.UseVisualStyleBackColor = True
+        '
+        'FancyClock
+        '
+        Me.FancyClock.Font = New System.Drawing.Font("KEPPYDIGITAL", 72.0!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FancyClock.Location = New System.Drawing.Point(0, 1)
+        Me.FancyClock.Name = "FancyClock"
+        Me.FancyClock.Size = New System.Drawing.Size(591, 355)
+        Me.FancyClock.TabIndex = 8
+        Me.FancyClock.Text = "DAH SECRET!"
+        Me.FancyClock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.FancyClock.UseCompatibleTextRendering = True
+        '
         'MainWindow
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(599, 382)
         Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.Tabs)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "MainWindow"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Keppy's MIDI Driver (Configurator)"
-        Me.TabControl1.ResumeLayout(False)
+        Me.Tabs.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage1.PerformLayout()
         Me.TabPage2.ResumeLayout(False)
         Me.TabPage2.PerformLayout()
-        Me.TabPage4.ResumeLayout(False)
-        Me.TabPage4.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
+        Me.TabPage4.ResumeLayout(False)
+        Me.TabPage4.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.VolumeBar, System.ComponentModel.ISupportInitialize).EndInit()
@@ -929,14 +983,15 @@ Partial Class MainWindow
         CType(Me.TracksLimit, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.bufsize, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PolyphonyLimit, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TabPage5.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
+    Friend WithEvents Tabs As System.Windows.Forms.TabControl
     Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
     Friend WithEvents PortABox As System.Windows.Forms.ListBox
     Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
+    Friend WithEvents TabPage4 As System.Windows.Forms.TabPage
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents ApplyPortA As System.Windows.Forms.Button
     Friend WithEvents ClearPortA As System.Windows.Forms.Button
@@ -944,7 +999,6 @@ Partial Class MainWindow
     Friend WithEvents MoveUpPortA As System.Windows.Forms.Button
     Friend WithEvents RemoveSFPortA As System.Windows.Forms.Button
     Friend WithEvents ImportSFPortA As System.Windows.Forms.Button
-    Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents ApplyPortB As System.Windows.Forms.Button
     Friend WithEvents ClearPortB As System.Windows.Forms.Button
     Friend WithEvents MoveDownPortB As System.Windows.Forms.Button
@@ -993,7 +1047,7 @@ Partial Class MainWindow
     Friend WithEvents SoftwareRendering As System.Windows.Forms.CheckBox
     Friend WithEvents FloatingDisabled As System.Windows.Forms.CheckBox
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
-    Friend WithEvents TabPage4 As System.Windows.Forms.TabPage
+    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
     Friend WithEvents ProgramsBlackList As System.Windows.Forms.ListBox
     Friend WithEvents RemoveBlackList As System.Windows.Forms.Button
     Friend WithEvents AddBlackList As System.Windows.Forms.Button
@@ -1007,5 +1061,11 @@ Partial Class MainWindow
     Friend WithEvents Label13 As System.Windows.Forms.Label
     Friend WithEvents Label14 As System.Windows.Forms.Label
     Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents DisableCheckPortA As System.Windows.Forms.CheckBox
+    Friend WithEvents DisableCheckPortB As System.Windows.Forms.CheckBox
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents FancyClockTimer As System.Windows.Forms.Timer
+    Friend WithEvents TabPage5 As System.Windows.Forms.TabPage
+    Friend WithEvents FancyClock As System.Windows.Forms.Label
 
 End Class

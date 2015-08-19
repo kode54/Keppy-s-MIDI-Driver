@@ -22,12 +22,10 @@ Partial Class AboutProg
     'Non modificarla nell'editor del codice.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AboutProg))
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.OKSorry = New System.Windows.Forms.Button()
-        Me.UpdateTimer = New System.Windows.Forms.Timer(Me.components)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -60,10 +58,6 @@ Partial Class AboutProg
         Me.OKSorry.Text = "OK"
         Me.OKSorry.UseVisualStyleBackColor = True
         '
-        'UpdateTimer
-        '
-        Me.UpdateTimer.Interval = 10
-        '
         'AboutProg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -87,5 +81,4 @@ Partial Class AboutProg
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
     Friend WithEvents OKSorry As System.Windows.Forms.Button
-    Friend WithEvents UpdateTimer As System.Windows.Forms.Timer
 End Class

@@ -194,7 +194,7 @@ NEXT3:
    ${EndIf}
 REGDONE:
   ; Write the uninstall keys
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "DisplayName" "Keppy's MIDI Driver 1.5 (Bugfix 210)"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "DisplayName" "Keppy's MIDI Driver 1.5 (Bugfix 220)"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "NoRepair" 1
   WriteRegDWORD HKLM "Software\Keppy's MIDI Driver" "volume" "10000"
@@ -225,7 +225,8 @@ REGDONE:
    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "UninstallString" '"$WINDIR\SysWow64\keppymididrv\keppymididrvuninstall.exe"'
    CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\Uninstall.lnk" "$WINDIR\SysWow64\keppymididrv\keppymididrvuninstall.exe" "" "$WINDIR\SysWow64\keppymididrv\keppymididrvuninstall.exe" 0
    CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\SoundFont Packer.lnk" "$WINDIR\SysWow64\keppymididrv\sfpacker.exe" "" "$WINDIR\SysWow64\sfpacker.exe" 0
-   CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\Configure Keppy's MIDI Driver.lnk" "$WINDIR\System32\keppymididrv\keppymididrvcfg.exe" "" "$WINDIR\SysWow64\keppymididrv\keppymididrvcfg.exe" 0
+   CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\Configure Keppy's MIDI Driver.lnk" "$WINDIR\SysWow64\keppymididrv\keppymididrvcfg.exe" "" "$WINDIR\SysWow64\keppymididrv\keppymididrvcfg.exe" 0
+   CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\Configure Keppy's MIDI Driver (Debug mode).lnk" "$WINDIR\SysWow64\keppymididrv\keppymididrvcfg.exe" "-debug" "$WINDIR\SysWow64\keppymididrv\keppymididrvcfg.exe" 0
    ${Else}
    WriteRegStr HKLM "Software\Keppy's MIDI Driver" "path" "$WINDIR\System32\keppymididrv"
    WriteRegDWORD HKLM "Software\Keppy's MIDI Driver" "buflen" "10"
@@ -252,7 +253,8 @@ REGDONE:
    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Keppy's MIDI Driver" "UninstallString" '"$WINDIR\System32\keppymididrv\keppymididrvuninstall.exe"'
    CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\Uninstall.lnk" "$WINDIR\System32\keppymididrv\keppymididrvuninstall.exe" "" "$WINDIR\System32\keppymididrv\keppymididrvuninstall.exe" 0
    CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\SoundFont Packer.lnk" "$WINDIR\System32\keppymididrv\sfpacker.exe" "" "$WINDIR\System32\sfpacker.exe" 0
-   CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\Configure Keppy's MIDI Driver.lnk" "$WINDIR\System32\keppymididrv\keppymididrvcfg.exe" "" "$WINDIR\System32\keppymididrv\keppymididrvcfg" 0
+   CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\Configure Keppy's MIDI Driver.lnk" "$WINDIR\System32\keppymididrv\keppymididrvcfg.exe" "" "$WINDIR\System32\keppymididrv\keppymididrvcfg.exe" 0
+   CreateShortCut "$SMPROGRAMS\Keppy's MIDI Driver\Configure Keppy's MIDI Driver (Debug mode).lnk" "$WINDIR\System32\keppymididrv\keppymididrvcfg.exe" "-debug" "$WINDIR\System32\keppymididrv\keppymididrvcfg.exe" 0
    ${EndIf}
    MessageBox MB_OK "Installation complete! Use the driver configuration tool which is in the 'Keppy's MIDI Driver' program shortcut directory to configure the driver."
    
