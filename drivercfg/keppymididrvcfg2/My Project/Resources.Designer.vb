@@ -83,6 +83,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Cerca una risorsa localizzata di tipo System.Byte[].
+        '''</summary>
+        Friend ReadOnly Property kepsdigital() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("kepsdigital", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Cerca una stringa localizzata simile a Microsoft deprecated the hardware acceleration since the release of Windows Vista, that&apos;s why the option is enabled by default on your current system..
         '''</summary>
         Friend ReadOnly Property WhyFunctionsDisabled() As String

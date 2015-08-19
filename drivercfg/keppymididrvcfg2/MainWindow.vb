@@ -2,10 +2,47 @@
 Imports System.Drawing
 Imports System.Net
 Imports Microsoft.Win32
+Imports System.Drawing.Text
+Imports System.Runtime.InteropServices
+
+Module CustomFont
+
+    Private _pfc As PrivateFontCollection = Nothing
+
+    Public ReadOnly Property GetInstance(ByVal Size As Single, ByVal style As FontStyle) As Font
+        Get
+            If _pfc Is Nothing Then LoadFont()
+            Return New Font(_pfc.Families(0), Size, style)
+        End Get
+    End Property
+
+    Private Sub LoadFont()
+        Try
+            _pfc = New PrivateFontCollection
+            Dim fontMemPointer As IntPtr = Marshal.AllocCoTaskMem(My.Resources.kepsdigital.Length)
+            Marshal.Copy(My.Resources.kepsdigital, 0, fontMemPointer, My.Resources.kepsdigital.Length)
+            _pfc.AddMemoryFont(fontMemPointer, My.Resources.kepsdigital.Length)
+            Marshal.FreeCoTaskMem(fontMemPointer)
+        Catch ex As Exception
+            MsgBox("Fatal error while loading custom font. Press OK to quit.")
+            Application.Exit()
+        End Try
+    End Sub
+
+End Module
 
 Public Class MainWindow
 
     Public Declare Function GetAsyncKeyState Lib "user32.dll" (ByVal vKey As Int32) As UShort 'Used for the ENTER button, to manually add names to the blacklist
+
+    Function CheckForAlphaCharacters(ByVal StringToCheck As String)
+        For i = 0 To StringToCheck.Length - 1
+            If Char.IsLetter(StringToCheck.Chars(i)) Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
 
     Public Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -45,7 +82,7 @@ Public Class MainWindow
             Console.WriteLine("The soundfont list for Port A doesn't exist. I'll create it.")
             File.Create(Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist").Dispose()
         End Try
-        
+
         Try 'Does the same for Port B
             Dim PortBSFList As String = (Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist")
             Dim reader2 As StreamReader = New StreamReader(New FileStream(PortBSFList, FileMode.Open))
@@ -127,6 +164,8 @@ Public Class MainWindow
             Versionlabel.Text = "Your current O.S. is: Wine, I guess?"
         End If
 
+        CurrentVolumeHUE.Font = CustomFont.GetInstance(48, FontStyle.Italic) 'The fancy font for the volume label! :3
+
         If My.Computer.Registry.LocalMachine.OpenSubKey(Not64Bit, True) Is Nothing Then 'Reads values from the registry
             My.Computer.Registry.LocalMachine.CreateSubKey("SOFTWARE\Wow6432Node\Keppy's MIDI Driver\")
             Dim keppykey = My.Computer.Registry.LocalMachine.OpenSubKey(Not64Bit, True)
@@ -170,7 +209,7 @@ Public Class MainWindow
             Dim VolumeValue As Integer
             Dim x As Double = VolumeBar.Value.ToString / 100
             VolumeValue = Convert.ToInt32(x)
-            CurrentVolumeHUE.Text = "Volume: " + VolumeValue.ToString
+            CurrentVolumeHUE.Text = VolumeValue.ToString
         Else
             Dim keppykey = My.Computer.Registry.LocalMachine.OpenSubKey(Not64Bit, True)
             MaxCPU.Text = keppykey.GetValue("cpu")
@@ -229,7 +268,7 @@ Public Class MainWindow
             Dim VolumeValue As Integer
             Dim x As Double = VolumeBar.Value.ToString / 100
             VolumeValue = Convert.ToInt32(x)
-            CurrentVolumeHUE.Text = "Volume: " + VolumeValue.ToString
+            CurrentVolumeHUE.Text = VolumeValue.ToString
             If osVer.Major > 5 Then
                 SoftwareRendering.Checked = True
                 SoftwareRendering.Enabled = False
@@ -238,9 +277,7 @@ Public Class MainWindow
         End If
     End Sub
 
-    Private Sub RemoveSFPortA_Click(sender As Object, e As EventArgs) Handles RemoveSFPortA.Click
-        PortABox.Items.Remove(PortABox.SelectedItem)
-    End Sub
+    ' Soundfont list part starts here!
 
     Private Sub ApplyPortA_Click(sender As Object, e As EventArgs) Handles ApplyPortA.Click
         Dim BASSMIDIListA As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymidi.sflist"
@@ -256,17 +293,121 @@ Public Class MainWindow
         MsgBox("Settings applied to Port A!", 64, "Success")
     End Sub
 
+    Private Sub ApplyPortB_Click(sender As Object, e As EventArgs) Handles ApplyPortB.Click
+        Dim BASSMIDIListB As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist"
+        Dim Filenum As Integer = FreeFile()
+        FileOpen(Filenum, BASSMIDIListB, OpenMode.Output)
+        FileClose()
+
+        Using SW As New IO.StreamWriter(BASSMIDIListB, True)
+            For Each itm As String In Me.PortBBox.Items
+                SW.WriteLine(itm)
+            Next
+        End Using
+        MsgBox("Settings applied to Port B!", 64, "Success")
+    End Sub
+
     Private Sub ImportSFPortA_Click(sender As Object, e As EventArgs) Handles ImportSFPortA.Click
         Try
             Dim strlist As New List(Of String)
-            Dim file As String
-            PortAOpenDialog1.Filter = "SoundFont/SFZ Files|*.sf1;*.sf2;*.sf2pack;*.sfz|All files|*.*"
+            PortAOpenDialog1.Filter = "SoundFont/SFZ Files (*.sf2, *.sfpack, *.sfz)|*.sf1;*.sf2;*.sf2pack;*.sfz"
             PortAOpenDialog1.FileName = ""
             If PortAOpenDialog1.ShowDialog = DialogResult.OK Then
-                For Each file In PortAOpenDialog1.FileNames
-                    strlist.Add(file)
-                    PortABox.Items.Add(file)
-                Next
+                Dim fileName As String = PortAOpenDialog1.FileName
+                Dim extension As String
+                extension = Path.GetExtension(fileName)
+                If extension.ToString = ".sfz" Then
+                    Dim bank As String
+                    Dim preset As String
+                    bank = InputBox("Enter the number of the bank. (From 0 to 127)", "Select a bank")
+                    preset = InputBox("Enter the number of the preset. (From 0 to 127)", "Select a preset")
+                    If CheckForAlphaCharacters(bank) And CheckForAlphaCharacters(bank) Then
+                        PortABox.Items.Add("p0,0=0,0|" + PortAOpenDialog1.FileName)
+                    Else
+                        If bank > 128 Then
+                            If preset > 127 Then
+                                PortABox.Items.Add("p127,127=0,0|" + PortAOpenDialog1.FileName)
+                            ElseIf preset < 0 Then
+                                PortABox.Items.Add("p127,0=0,0|" + PortAOpenDialog1.FileName)
+                            Else
+                                PortABox.Items.Add("p127," + preset + "=0,0|" + PortAOpenDialog1.FileName)
+                            End If
+                        ElseIf bank < 0 Then
+                            If preset > 127 Then
+                                PortABox.Items.Add("p0,127=0,0|" + PortAOpenDialog1.FileName)
+                            ElseIf preset < 0 Then
+                                PortABox.Items.Add("p0,0=0,0|" + PortAOpenDialog1.FileName)
+                            Else
+                                PortABox.Items.Add("p0," + preset + "=0,0|" + PortAOpenDialog1.FileName)
+                            End If
+                        Else
+                            If preset > 127 Then
+                                PortABox.Items.Add("p" + bank + ",127=0,0|" + PortAOpenDialog1.FileName)
+                            ElseIf preset < 0 Then
+                                PortABox.Items.Add("p" + bank + ",0=0,0|" + PortAOpenDialog1.FileName)
+                            Else
+                                PortABox.Items.Add("p" + bank + "," + preset + "=0,0|" + PortAOpenDialog1.FileName)
+                            End If
+                        End If
+                    End If
+                ElseIf extension.ToString = ".sf2" Or extension.ToString = ".sfpack" Then
+                    PortABox.Items.Add(PortAOpenDialog1.FileName)
+                Else
+                    MsgBox("Invalid soundfont! BASSMIDI only supports SFZ, SF2 and SFPACK files!", 16, "Error while importing file")
+                End If
+            End If
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub ImportSFPortB_Click(sender As Object, e As EventArgs) Handles ImportSFPortB.Click
+        Try
+            Dim strlist As New List(Of String)
+            PortBOpenDialog1.Filter = "SoundFont/SFZ Files (*.sf2, *.sfpack, *.sfz)|*.sf1;*.sf2;*.sf2pack;*.sfz"
+            PortBOpenDialog1.FileName = ""
+            If PortBOpenDialog1.ShowDialog = DialogResult.OK Then
+                Dim fileName As String = PortBOpenDialog1.FileName
+                Dim extension As String
+                extension = Path.GetExtension(fileName)
+                If extension.ToString = ".sfz" Then
+                    Dim bank As String
+                    Dim preset As String
+                    bank = InputBox("Enter the number of the bank. (From 0 to 127)", "Select a bank")
+                    preset = InputBox("Enter the number of the preset. (From 0 to 127)", "Select a preset")
+                    If CheckForAlphaCharacters(bank) And CheckForAlphaCharacters(bank) Then
+                        PortBBox.Items.Add("p0,0=0,0|" + PortBOpenDialog1.FileName)
+                    Else
+                        If bank > 128 Then
+                            If preset > 127 Then
+                                PortBBox.Items.Add("p127,127=0,0|" + PortBOpenDialog1.FileName)
+                            ElseIf preset < 0 Then
+                                PortBBox.Items.Add("p127,0=0,0|" + PortBOpenDialog1.FileName)
+                            Else
+                                PortBBox.Items.Add("p127," + preset + "=0,0|" + PortBOpenDialog1.FileName)
+                            End If
+                        ElseIf bank < 0 Then
+                            If preset > 127 Then
+                                PortBBox.Items.Add("p0,127=0,0|" + PortBOpenDialog1.FileName)
+                            ElseIf preset < 0 Then
+                                PortBBox.Items.Add("p0,0=0,0|" + PortBOpenDialog1.FileName)
+                            Else
+                                PortBBox.Items.Add("p0," + preset + "=0,0|" + PortBOpenDialog1.FileName)
+                            End If
+                        Else
+                            If preset > 127 Then
+                                PortBBox.Items.Add("p" + bank + ",127=0,0|" + PortBOpenDialog1.FileName)
+                            ElseIf preset < 0 Then
+                                PortBBox.Items.Add("p" + bank + ",0=0,0|" + PortBOpenDialog1.FileName)
+                            Else
+                                PortBBox.Items.Add("p" + bank + "," + preset + "=0,0|" + PortBOpenDialog1.FileName)
+                            End If
+                        End If
+                    End If
+                ElseIf extension.ToString = ".sf2" Or extension.ToString = ".sfpack" Then
+                    PortBBox.Items.Add(PortBOpenDialog1.FileName)
+                Else
+                    MsgBox("Invalid soundfont! BASSMIDI only supports SFZ, SF2 and SFPACK files!", 16, "Error while importing file")
+                End If
             End If
         Catch ex As Exception
         End Try
@@ -290,30 +431,6 @@ Public Class MainWindow
         End If
     End Sub
 
-    Private Sub ClearPortA_Click_1(sender As Object, e As EventArgs)
-        PortABox.Items.Clear()
-    End Sub
-
-    Private Sub ImportSFPortB_Click(sender As Object, e As EventArgs) Handles ImportSFPortB.Click
-        Try
-            Dim strlist As New List(Of String)
-            Dim file As String
-            PortBOpenDialog1.Filter = "SoundFont/SFZ Files|*.sf1;*.sf2;*.sf2pack;*.sfz|All files|*.*"
-            PortBOpenDialog1.FileName = ""
-            If PortBOpenDialog1.ShowDialog = DialogResult.OK Then
-                For Each file In PortBOpenDialog1.FileNames
-                    strlist.Add(file)
-                    PortBBox.Items.Add(file)
-                Next
-            End If
-        Catch ex As Exception
-        End Try
-    End Sub
-
-    Private Sub RemoveSFPortB_Click(sender As Object, e As EventArgs) Handles RemoveSFPortB.Click
-        PortBBox.Items.Remove(PortBBox.SelectedItem)
-    End Sub
-
     Private Sub MoveUpPortB_Click(sender As Object, e As EventArgs) Handles MoveUpPortB.Click
         If PortBBox.SelectedIndex > 0 Then
             Dim I = PortBBox.SelectedIndex - 1
@@ -332,24 +449,24 @@ Public Class MainWindow
         End If
     End Sub
 
+    Private Sub ClearPortA_Click_1(sender As Object, e As EventArgs)
+        PortABox.Items.Clear()
+    End Sub
+
     Private Sub ClearPortB_Click(sender As Object, e As EventArgs) Handles ClearPortB.Click
         PortBBox.Items.Clear()
         MsgBox("List cleared!", 64, "Success")
     End Sub
 
-    Private Sub ApplyPortB_Click(sender As Object, e As EventArgs) Handles ApplyPortB.Click
-        Dim BASSMIDIListB As String = Environment.GetEnvironmentVariable("WINDIR") + "\keppymidib.sflist"
-        Dim Filenum As Integer = FreeFile()
-        FileOpen(Filenum, BASSMIDIListB, OpenMode.Output)
-        FileClose()
-
-        Using SW As New IO.StreamWriter(BASSMIDIListB, True)
-            For Each itm As String In Me.PortBBox.Items
-                SW.WriteLine(itm)
-            Next
-        End Using
-        MsgBox("Settings applied to Port B!", 64, "Success")
+    Private Sub RemoveSFPortA_Click(sender As Object, e As EventArgs) Handles RemoveSFPortA.Click
+        PortABox.Items.Remove(PortABox.SelectedItem)
     End Sub
+
+    Private Sub RemoveSFPortB_Click(sender As Object, e As EventArgs) Handles RemoveSFPortB.Click
+        PortBBox.Items.Remove(PortBBox.SelectedItem)
+    End Sub
+
+    ' Soundfont list part is over!
 
     Private Sub VolumeBar_Scroll(sender As Object, e As EventArgs)
         Dim lnumber As Double
@@ -492,7 +609,7 @@ Public Class MainWindow
         Dim VolumeValue As Integer
         Dim x As Double = VolumeBar.Value.ToString / 100
         VolumeValue = Convert.ToInt32(x)
-        CurrentVolumeHUE.Text = "Volume: " + VolumeValue.ToString
+        CurrentVolumeHUE.Text = VolumeValue.ToString
         If keppykey.GetValue("dsorxaudio") = 1 Then
             XAudioPipe.Checked = True
             DSPipe.Checked = False
@@ -538,7 +655,7 @@ Public Class MainWindow
         Dim VolumeValue As Integer
         Dim x As Double = VolumeBar.Value.ToString / 100
         VolumeValue = Convert.ToInt32(x)
-        CurrentVolumeHUE.Text = "Volume: " + VolumeValue.ToString
+        CurrentVolumeHUE.Text = VolumeValue.ToString
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked

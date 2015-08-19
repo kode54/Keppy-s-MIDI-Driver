@@ -26,6 +26,7 @@ Partial Class MainWindow
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainWindow))
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ApplyPortA = New System.Windows.Forms.Button()
         Me.ClearPortA = New System.Windows.Forms.Button()
@@ -35,6 +36,7 @@ Partial Class MainWindow
         Me.ImportSFPortA = New System.Windows.Forms.Button()
         Me.PortABox = New System.Windows.Forms.ListBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.ApplyPortB = New System.Windows.Forms.Button()
         Me.ClearPortB = New System.Windows.Forms.Button()
@@ -128,6 +130,7 @@ Partial Class MainWindow
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.Label14)
         Me.TabPage1.Controls.Add(Me.Label1)
         Me.TabPage1.Controls.Add(Me.ApplyPortA)
         Me.TabPage1.Controls.Add(Me.ClearPortA)
@@ -143,6 +146,15 @@ Partial Class MainWindow
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Soundfont in Port A"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'Label14
+        '
+        Me.Label14.Location = New System.Drawing.Point(509, 148)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(75, 128)
+        Me.Label14.TabIndex = 9
+        Me.Label14.Text = "On SFZ files:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "px,y=0,0|" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "x = Bank" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "y = Preset"
+        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label1
         '
@@ -218,6 +230,7 @@ Partial Class MainWindow
         '
         'TabPage2
         '
+        Me.TabPage2.Controls.Add(Me.Label15)
         Me.TabPage2.Controls.Add(Me.Label2)
         Me.TabPage2.Controls.Add(Me.ApplyPortB)
         Me.TabPage2.Controls.Add(Me.ClearPortB)
@@ -233,6 +246,15 @@ Partial Class MainWindow
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Soundfont in Port B"
         Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'Label15
+        '
+        Me.Label15.Location = New System.Drawing.Point(509, 148)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(75, 128)
+        Me.Label15.TabIndex = 17
+        Me.Label15.Text = "On SFZ files:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "px,y=0,0|" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "x = Bank" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "y = Preset"
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label2
         '
@@ -455,14 +477,14 @@ Partial Class MainWindow
         '
         Me.GroupBox1.Controls.Add(Me.SoftwareRendering)
         Me.GroupBox1.Controls.Add(Me.FloatingDisabled)
-        Me.GroupBox1.Controls.Add(Me.CurrentVolumeHUE)
         Me.GroupBox1.Controls.Add(Me.VolumeBar)
+        Me.GroupBox1.Controls.Add(Me.CurrentVolumeHUE)
         Me.GroupBox1.Location = New System.Drawing.Point(8, 6)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(575, 74)
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Volume"
+        Me.GroupBox1.Text = "Quality/Volume"
         '
         'SoftwareRendering
         '
@@ -489,13 +511,15 @@ Partial Class MainWindow
         '
         'CurrentVolumeHUE
         '
-        Me.CurrentVolumeHUE.Font = New System.Drawing.Font("Trebuchet MS", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CurrentVolumeHUE.Location = New System.Drawing.Point(469, 11)
+        Me.CurrentVolumeHUE.Font = New System.Drawing.Font("KEPPYDIGITAL", 44.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CurrentVolumeHUE.Location = New System.Drawing.Point(336, 9)
         Me.CurrentVolumeHUE.Name = "CurrentVolumeHUE"
-        Me.CurrentVolumeHUE.Size = New System.Drawing.Size(100, 23)
+        Me.CurrentVolumeHUE.Size = New System.Drawing.Size(236, 60)
         Me.CurrentVolumeHUE.TabIndex = 1
-        Me.CurrentVolumeHUE.Text = "Volume: 100"
-        Me.CurrentVolumeHUE.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CurrentVolumeHUE.Text = "100"
+        Me.CurrentVolumeHUE.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.CurrentVolumeHUE.UseCompatibleTextRendering = True
+        Me.CurrentVolumeHUE.UseMnemonic = False
         '
         'VolumeBar
         '
@@ -504,7 +528,7 @@ Partial Class MainWindow
         Me.VolumeBar.Location = New System.Drawing.Point(4, 37)
         Me.VolumeBar.Maximum = 10000
         Me.VolumeBar.Name = "VolumeBar"
-        Me.VolumeBar.Size = New System.Drawing.Size(567, 33)
+        Me.VolumeBar.Size = New System.Drawing.Size(477, 33)
         Me.VolumeBar.TabIndex = 0
         Me.VolumeBar.TickFrequency = 100
         Me.VolumeBar.TickStyle = System.Windows.Forms.TickStyle.Both
@@ -614,12 +638,11 @@ Partial Class MainWindow
         '
         'Panel1
         '
-        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Controls.Add(Me.Label9)
         Me.Panel1.Controls.Add(Me.DSPipe)
         Me.Panel1.Controls.Add(Me.XAudioPipe)
-        Me.Panel1.Location = New System.Drawing.Point(6, 84)
+        Me.Panel1.Location = New System.Drawing.Point(5, 86)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(303, 59)
         Me.Panel1.TabIndex = 16
@@ -627,7 +650,7 @@ Partial Class MainWindow
         'Panel2
         '
         Me.Panel2.Controls.Add(Me.Label11)
-        Me.Panel2.Location = New System.Drawing.Point(108, -1)
+        Me.Panel2.Location = New System.Drawing.Point(109, 0)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(194, 59)
         Me.Panel2.TabIndex = 3
@@ -982,5 +1005,7 @@ Partial Class MainWindow
     Friend WithEvents ManualBlackListLabel As System.Windows.Forms.Label
     Friend WithEvents ManualBlackList As System.Windows.Forms.TextBox
     Friend WithEvents Label13 As System.Windows.Forms.Label
+    Friend WithEvents Label14 As System.Windows.Forms.Label
+    Friend WithEvents Label15 As System.Windows.Forms.Label
 
 End Class
