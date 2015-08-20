@@ -61,6 +61,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Cerca una risorsa localizzata di tipo System.Drawing.Icon simile a (Icona).
+        '''</summary>
+        Friend ReadOnly Property _128() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("_128", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Cerca una stringa localizzata simile a Messing up with the default list can potentially hang/block your PC,
         '''since the driver is loaded by some system processes. (Especially on Windows XP)
         '''
@@ -69,6 +79,16 @@ Namespace My.Resources
         Friend ReadOnly Property AdvancedBlackListWarning() As String
             Get
                 Return ResourceManager.GetString("AdvancedBlackListWarning", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Cerca una risorsa localizzata di tipo System.Drawing.Icon simile a (Icona).
+        '''</summary>
+        Friend ReadOnly Property gear() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("gear", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
             End Get
         End Property
         
