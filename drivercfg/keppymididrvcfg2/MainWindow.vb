@@ -232,7 +232,7 @@ Public Class MainWindow
                 Dim keppykey = My.Computer.Registry.LocalMachine.OpenSubKey(Not64Bit, True)
                 keppykey.SetValue("buflen", "10", RegistryValueKind.DWord)
                 keppykey.SetValue("polyphony", "1000", RegistryValueKind.DWord)
-                keppykey.SetValue("preload", "1", RegistryValueKind.DWord)
+                keppykey.SetValue("preload", "0", RegistryValueKind.DWord)
                 keppykey.SetValue("sampframe", "792", RegistryValueKind.DWord)
                 keppykey.SetValue("nofloat", "1", RegistryValueKind.DWord)
                 keppykey.SetValue("softwaremode", "0", RegistryValueKind.DWord)
@@ -251,7 +251,7 @@ Public Class MainWindow
                 TracksLimit.Value = keppykey.GetValue("tracks")
                 VolumeBar.Value = keppykey.GetValue("volume")
                 If keppykey.GetValue("preload") = 1 Then
-                    Preload.Checked = False
+                    Preload.Checked = True
                 Else
                     Preload.Checked = False
                 End If
@@ -290,7 +290,7 @@ Public Class MainWindow
                 lnumber = keppykey.GetValue("volume") / 100
                 lResult = Int(lnumber)
                 If keppykey.GetValue("preload") = 1 Then
-                    Preload.Checked = False
+                    Preload.Checked = True
                 Else
                     Preload.Checked = False
                 End If
