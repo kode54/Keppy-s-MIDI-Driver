@@ -94,6 +94,7 @@ static int dsound_frames = 0; //default
 static int midivoices = 0; //Max voices INT
 static int maxcpu = 0; //CPU usage INT
 static int softwaremode = 0; //Software rendering
+static int preload = 0; //Soundfont preloading
 static int frequency = 0; //Audio frequency
 static int sinc = 0; //Sinc
 static int tracks = 0; //Tracks limit
@@ -352,6 +353,40 @@ static bool load_font_item(unsigned uDeviceID, const TCHAR * in_path)
 }
 
 void LoadFonts(UINT uDeviceID, const TCHAR * name)
+{
+	FreeFonts(uDeviceID);
+
+	if (name && *name)
+	{
+		const TCHAR * ext = _tcsrchr(name, _T('.'));
+		if (ext) ext++;
+		if (!_tcsicmp(ext, _T("sf2")) || !_tcsicmp(ext, _T("sf2pack")) || !_tcsicmp(ext, _T("sfz")))
+		{
+			if (!load_font_item(uDeviceID, name))
+			{
+				FreeFonts(uDeviceID);
+				return;
+			}
+		}
+		else if (!_tcsicmp(ext, _T("sflist")))
+		{
+			if (!load_font_item(uDeviceID, name))
+			{
+				FreeFonts(uDeviceID);
+				return;
+			}
+		}
+
+		std::vector< BASS_MIDI_FONTEX > fonts;
+		for (unsigned long i = 0, j = presetList[uDeviceID].size(); i < j; ++i)
+		{
+			fonts.push_back(presetList[uDeviceID][j - i - 1]);
+		}
+		BASS_MIDI_StreamSetFonts(hStream[uDeviceID], &fonts[0], (unsigned int)fonts.size() | BASS_MIDI_FONT_EX);
+	}
+}
+
+void PreloadFonts(UINT uDeviceID, const TCHAR * name)
 {
 	FreeFonts(uDeviceID);
 
@@ -692,6 +727,7 @@ void load_settings()
 	RegQueryValueEx(hKey, L"buflen", NULL, &dwType, (LPBYTE)&dsound_frames, &dwSize);
 	RegQueryValueEx(hKey, L"polyphony", NULL, &dwType, (LPBYTE)&midivoices, &dwSize);
 	RegQueryValueEx(hKey, L"tracks", NULL, &dwType, (LPBYTE)&tracks, &dwSize);
+	RegQueryValueEx(hKey, L"preload", NULL, &dwType, (LPBYTE)&preload, &dwSize);
 	RegQueryValueEx(hKey, L"sampframe", NULL, &dwType, (LPBYTE)&sampframe, &dwSize);
 	RegQueryValueEx(hKey, L"volume", NULL, &dwType, (LPBYTE)&volume, &dwSize);
 	RegQueryValueEx(hKey, L"cpu", NULL, &dwType, (LPBYTE)&maxcpu, &dwSize);
@@ -864,6 +900,13 @@ BOOL ProcessBlackList(){
 
 
 unsigned __stdcall threadfunc(LPVOID lpV){
+	const DWORD bass_flags =
+#ifdef UNICODE
+		BASS_UNICODE
+#else
+		0
+#endif
+		;
 	unsigned i;
 	int opend = 0;
 	TCHAR config[MAX_PATH];
@@ -910,11 +953,11 @@ unsigned __stdcall threadfunc(LPVOID lpV){
 			BASS_MIDI_StreamEvent(hStream[0], 0, MIDI_EVENT_SYSTEM, MIDI_SYSTEM_DEFAULT);
 			BASS_MIDI_StreamEvent(hStream[1], 0, MIDI_EVENT_SYSTEM, MIDI_SYSTEM_DEFAULT);
 			if (GetWindowsDirectory(config, MAX_PATH))
-			{
-				_tcscpy(configb, config);
-				_tcscat(config, _T("\\keppymidi.sflist"));
-				_tcscat(configb, _T("\\keppymidib.sflist"));
-			}
+				{
+					_tcscpy(configb, config);
+					_tcscat(config, _T("\\keppymidi.sflist"));
+					_tcscat(configb, _T("\\keppymidib.sflist"));
+				}
 			LoadFonts(0, config);
 			LoadFonts(1, configb);
 			BASS_ChannelSetAttribute(hStream[0], BASS_ATTRIB_MIDI_CHANS, trackslimit);

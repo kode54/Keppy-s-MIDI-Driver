@@ -96,14 +96,21 @@ Partial Class MainWindow
         Me.DisableFX = New System.Windows.Forms.CheckBox()
         Me.Preload = New System.Windows.Forms.CheckBox()
         Me.NoteOff = New System.Windows.Forms.CheckBox()
+        Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.FancyClock = New System.Windows.Forms.Label()
         Me.PortAOpenDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.PortBOpenDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Information = New System.Windows.Forms.ToolTip(Me.components)
         Me.BlackListFileDialog = New System.Windows.Forms.OpenFileDialog()
         Me.FancyClockTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.TabPage5 = New System.Windows.Forms.TabPage()
-        Me.FancyClock = New System.Windows.Forms.Label()
+        Me.SystemTrayicon = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ShowMainWindow = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AboutDriverWindow = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CloseApp = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AutomaticStartup = New System.Windows.Forms.CheckBox()
         Me.Tabs.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
@@ -119,6 +126,7 @@ Partial Class MainWindow
         CType(Me.bufsize, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PolyphonyLimit, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage5.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Tabs
@@ -553,7 +561,7 @@ Partial Class MainWindow
         'CurrentVolumeHUE
         '
         Me.CurrentVolumeHUE.Font = New System.Drawing.Font("KEPPYDIGITAL", 44.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CurrentVolumeHUE.Location = New System.Drawing.Point(336, 9)
+        Me.CurrentVolumeHUE.Location = New System.Drawing.Point(336, 8)
         Me.CurrentVolumeHUE.Name = "CurrentVolumeHUE"
         Me.CurrentVolumeHUE.Size = New System.Drawing.Size(236, 60)
         Me.CurrentVolumeHUE.TabIndex = 1
@@ -564,6 +572,7 @@ Partial Class MainWindow
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.AutomaticStartup)
         Me.GroupBox3.Controls.Add(Me.Versionlabel)
         Me.GroupBox3.Controls.Add(Me.Button3)
         Me.GroupBox3.Controls.Add(Me.LatestVersionDriver)
@@ -574,7 +583,7 @@ Partial Class MainWindow
         Me.GroupBox3.Size = New System.Drawing.Size(575, 80)
         Me.GroupBox3.TabIndex = 5
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Updates"
+        Me.GroupBox3.Text = "Other/Updates"
         '
         'Versionlabel
         '
@@ -733,8 +742,7 @@ Partial Class MainWindow
         Me.Label4.Size = New System.Drawing.Size(112, 13)
         Me.Label4.TabIndex = 15
         Me.Label4.Text = "Maximum MIDI tracks:"
-        Me.Information.SetToolTip(Me.Label4, "Limit the tracks for BASSMIDI. (It'll automatically merge them into the existing " & _
-        "ones)")
+        Me.Information.SetToolTip(Me.Label4, "Limit the tracks for BASSMIDI. (The other tracks will be muted)")
         '
         'TracksLimit
         '
@@ -784,11 +792,11 @@ Partial Class MainWindow
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(451, 35)
+        Me.Label7.Location = New System.Drawing.Point(440, 35)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(59, 13)
+        Me.Label7.Size = New System.Drawing.Size(70, 13)
         Me.Label7.TabIndex = 10
-        Me.Label7.Text = "Buffer size:"
+        Me.Label7.Text = "Buffer length:"
         Me.Information.SetToolTip(Me.Label7, "Change the size of the buffer, for XAudio. (DirectSound is deprecated)")
         '
         'bufsize
@@ -848,11 +856,11 @@ Partial Class MainWindow
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(446, 13)
+        Me.Label3.Location = New System.Drawing.Point(404, 13)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(64, 13)
+        Me.Label3.Size = New System.Drawing.Size(106, 13)
         Me.Label3.TabIndex = 4
-        Me.Label3.Text = "Max voices:"
+        Me.Label3.Text = "Max voices (1-1000):"
         Me.Information.SetToolTip(Me.Label3, "Limit the polyphony for the driver.")
         '
         'PolyphonyLimit
@@ -901,6 +909,27 @@ Partial Class MainWindow
         "en a MIDI doesn't play properly)")
         Me.NoteOff.UseVisualStyleBackColor = True
         '
+        'TabPage5
+        '
+        Me.TabPage5.Controls.Add(Me.FancyClock)
+        Me.TabPage5.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage5.Name = "TabPage5"
+        Me.TabPage5.Size = New System.Drawing.Size(591, 356)
+        Me.TabPage5.TabIndex = 4
+        Me.TabPage5.Text = "Secret tab of doom"
+        Me.TabPage5.UseVisualStyleBackColor = True
+        '
+        'FancyClock
+        '
+        Me.FancyClock.Font = New System.Drawing.Font("KEPPYDIGITAL", 72.0!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FancyClock.Location = New System.Drawing.Point(0, 1)
+        Me.FancyClock.Name = "FancyClock"
+        Me.FancyClock.Size = New System.Drawing.Size(591, 355)
+        Me.FancyClock.TabIndex = 8
+        Me.FancyClock.Text = "DAH SECRET!"
+        Me.FancyClock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.FancyClock.UseCompatibleTextRendering = True
+        '
         'PortAOpenDialog1
         '
         Me.PortAOpenDialog1.FileName = "OpenFileDialog1"
@@ -927,26 +956,54 @@ Partial Class MainWindow
         '
         Me.FancyClockTimer.Interval = 1000
         '
-        'TabPage5
+        'SystemTrayicon
         '
-        Me.TabPage5.Controls.Add(Me.FancyClock)
-        Me.TabPage5.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage5.Name = "TabPage5"
-        Me.TabPage5.Size = New System.Drawing.Size(591, 356)
-        Me.TabPage5.TabIndex = 4
-        Me.TabPage5.Text = "Secret tab of doom"
-        Me.TabPage5.UseVisualStyleBackColor = True
+        Me.SystemTrayicon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info
+        Me.SystemTrayicon.BalloonTipText = "Keppy's MIDI Driver (Configurator)"
+        Me.SystemTrayicon.BalloonTipTitle = "Double click the icon, to show the configurator again"
+        Me.SystemTrayicon.ContextMenuStrip = Me.ContextMenuStrip1
+        Me.SystemTrayicon.Icon = CType(resources.GetObject("SystemTrayicon.Icon"), System.Drawing.Icon)
+        Me.SystemTrayicon.Text = "Keppy's MIDI Driver (Configurator)"
         '
-        'FancyClock
+        'ContextMenuStrip1
         '
-        Me.FancyClock.Font = New System.Drawing.Font("KEPPYDIGITAL", 72.0!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FancyClock.Location = New System.Drawing.Point(0, 1)
-        Me.FancyClock.Name = "FancyClock"
-        Me.FancyClock.Size = New System.Drawing.Size(591, 355)
-        Me.FancyClock.TabIndex = 8
-        Me.FancyClock.Text = "DAH SECRET!"
-        Me.FancyClock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.FancyClock.UseCompatibleTextRendering = True
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowMainWindow, Me.AboutDriverWindow, Me.ToolStripSeparator1, Me.CloseApp})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(179, 76)
+        '
+        'ShowMainWindow
+        '
+        Me.ShowMainWindow.Name = "ShowMainWindow"
+        Me.ShowMainWindow.Size = New System.Drawing.Size(178, 22)
+        Me.ShowMainWindow.Text = "Show main window"
+        '
+        'AboutDriverWindow
+        '
+        Me.AboutDriverWindow.Name = "AboutDriverWindow"
+        Me.AboutDriverWindow.Size = New System.Drawing.Size(178, 22)
+        Me.AboutDriverWindow.Text = "About the driver..."
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(175, 6)
+        '
+        'CloseApp
+        '
+        Me.CloseApp.Name = "CloseApp"
+        Me.CloseApp.Size = New System.Drawing.Size(178, 22)
+        Me.CloseApp.Text = "Exit"
+        '
+        'AutomaticStartup
+        '
+        Me.AutomaticStartup.AutoSize = True
+        Me.AutomaticStartup.Location = New System.Drawing.Point(459, 12)
+        Me.AutomaticStartup.Name = "AutomaticStartup"
+        Me.AutomaticStartup.Size = New System.Drawing.Size(117, 17)
+        Me.AutomaticStartup.TabIndex = 7
+        Me.AutomaticStartup.Text = "Start with Windows"
+        Me.Information.SetToolTip(Me.AutomaticStartup, "The configurator will automatically start (minimized) along with Windows.")
+        Me.AutomaticStartup.UseVisualStyleBackColor = True
         '
         'MainWindow
         '
@@ -984,6 +1041,7 @@ Partial Class MainWindow
         CType(Me.bufsize, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PolyphonyLimit, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage5.ResumeLayout(False)
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -1067,5 +1125,12 @@ Partial Class MainWindow
     Friend WithEvents FancyClockTimer As System.Windows.Forms.Timer
     Friend WithEvents TabPage5 As System.Windows.Forms.TabPage
     Friend WithEvents FancyClock As System.Windows.Forms.Label
+    Friend WithEvents SystemTrayicon As System.Windows.Forms.NotifyIcon
+    Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents ShowMainWindow As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AboutDriverWindow As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CloseApp As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AutomaticStartup As System.Windows.Forms.CheckBox
 
 End Class
